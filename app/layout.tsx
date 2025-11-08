@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import { StackProvider, StackTheme } from "@stackframe/stack";
+import { stackClientApp } from "../stack/client";
+import { ThemeProvider } from "@/components/theme-provider";
+import Header from "@/components/header";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,8 +16,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="fr" suppressHydrationWarning>
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <StackProvider app={stackClientApp}>
+            <StackTheme>
+              <header>
+                <Header />
+              </header>
+              <main className="w-[90vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col items-center gap-5">
+                {children}
+              </main>
+              <footer></footer>
+            </StackTheme>
+          </StackProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
