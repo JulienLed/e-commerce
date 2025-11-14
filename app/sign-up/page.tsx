@@ -44,6 +44,7 @@ export default function Page() {
               Créer un compte
             </Button>
           </section>
+          <div className="w-full border-t-2 h-1"></div>
           <section id="google-auth" className="flex justify-center">
             <Button
               onClick={async () => {

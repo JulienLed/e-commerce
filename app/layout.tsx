@@ -4,6 +4,8 @@ import { stackClientApp } from "../stack/client";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
 import "./globals.css";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 export const metadata: Metadata = {
   title: "Smoke",
@@ -26,13 +28,17 @@ export default function RootLayout({
         >
           <StackProvider app={stackClientApp}>
             <StackTheme>
-              <header>
-                <Header />
-              </header>
-              <main className="w-[90vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col items-center gap-5">
-                {children}
-              </main>
-              <footer></footer>
+              <Suspense fallback={<Loading />}>
+                <header>
+                  <Header />
+                </header>
+
+                <main className="w-[90vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col items-center gap-5">
+                  {children}
+                </main>
+
+                <footer></footer>
+              </Suspense>
             </StackTheme>
           </StackProvider>
         </ThemeProvider>

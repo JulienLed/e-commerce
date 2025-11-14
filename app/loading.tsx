@@ -1,6 +1,9 @@
-export default function Loading() {
+import { Spinner } from "@/components/ui/spinner";
 
-  // Stack uses React Suspense, which will render this page while user data is being fetched.
-  // See: https://nextjs.org/docs/app/api-reference/file-conventions/loading
-  return <></>;
+export default function Loading() {
+  return (
+    <div className="w-full h-screen flex justify-center items-center mx-auto">
+      <Spinner className="size-15" />
+    </div>
+  );
 }

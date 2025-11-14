@@ -45,6 +45,7 @@ export default function Page() {
               Se connecter
             </Button>
           </section>
+          <div className="w-full border-t-2 h-1"></div>
           <section id="google-auth" className="flex justify-center">
             <Button
               onClick={async () => {
