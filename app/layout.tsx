@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { StackProvider, StackTheme } from "@stackframe/stack";
-import { stackClientApp } from "../stack/client";
 import { ThemeProvider } from "@/components/theme-provider";
-import Header from "@/components/header";
+import Header from "@/components/header/header";
 import "./globals.css";
 import { Suspense } from "react";
 import Loading from "./loading";
@@ -26,21 +24,17 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <StackProvider app={stackClientApp}>
-            <StackTheme>
-              <Suspense fallback={<Loading />}>
-                <header>
-                  <Header />
-                </header>
+          <Suspense fallback={<Loading />}>
+            <header>
+              <Header />
+            </header>
 
-                <main className="w-[90vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col items-center gap-5">
-                  {children}
-                </main>
+            <main className="w-[90vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col items-center gap-5">
+              {children}
+            </main>
 
-                <footer></footer>
-              </Suspense>
-            </StackTheme>
-          </StackProvider>
+            <footer></footer>
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>
