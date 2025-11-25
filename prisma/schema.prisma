@@ -1,92 +1,81 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["neon_auth", "public"]
 }
 
-model users_sync {
-  raw_json   Json
-  id         String    @id @default(dbgenerated("(raw_json ->> 'id'::text)"))
-  name       String?   @default(dbgenerated("(raw_json ->> 'display_name'::text)"))
-  email      String?   @default(dbgenerated("(raw_json ->> 'primary_email'::text)"))
-  created_at DateTime? @default(dbgenerated("to_timestamp((trunc((((raw_json ->> 'signed_up_at_millis'::text))::bigint)::double precision) / (1000)::double precision))")) @db.Timestamptz(6)
-  updated_at DateTime? @db.Timestamptz(6)
-  deleted_at DateTime? @db.Timestamptz(6)
-  orders     orders[]
-
-  @@index([deleted_at])
-  @@schema("neon_auth")
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }
 
-model cart_items {
-  id       Int  @id @default(autoincrement())
-  quantity Int?
-
-  @@schema("public")
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  carts     Cart[]
+  orders    Order[]
 }
 
-model categories {
-  id         Int        @id @default(autoincrement())
-  name       String?
-  updated_at DateTime?  @default(now()) @db.Timestamptz(6)
-  created_at DateTime?  @default(now()) @db.Timestamptz(6)
-  products   products[]
-
-  @@schema("public")
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
 }
 
-model order_items {
-  id                Int       @id @default(autoincrement())
-  order_id          Int?
-  product_id        Int?
-  quantity          Int?
-  price_at_purchase Int?
-  orders            orders?   @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "orders_order_id_fkey")
-  products          products? @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "orders_product_id_fkey")
-
-  @@schema("public")
-}
-
-model orders {
-  id           Int           @id @default(autoincrement())
-  totat_amount Int?          @map("totat-amount")
-  status       order_status?
-  user_id      String?
-  created_at   DateTime?     @default(now()) @db.Timestamptz(6)
-  updated_at   DateTime?     @default(now()) @db.Timestamptz(6)
-  order_items  order_items[]
-  users_sync   users_sync?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@schema("public")
-}
-
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model products {
-  id          Int           @id @default(autoincrement())
-  name        String?
+model Product {
+  id          Int         @id @default(autoincrement())
+  name        String
   description String?
-  image_url   String?
-  price       Int?
-  stock       Int?
-  category_id Int?
-  updated_at  DateTime?     @default(now()) @db.Timestamptz(6)
-  created_at  DateTime?     @default(now()) @db.Timestamptz(6)
-  order_items order_items[]
-  categories  categories?   @relation(fields: [category_id], references: [id], onDelete: Cascade)
-
-  @@schema("public")
+  price       Float
+  stock       Int         @default(0)
+  categoryId  Int
+  category    Category    @relation(fields: [categoryId], references: [id])
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
 }
 
-enum order_status {
-  pending
-  paid
-  cancelled
-  refunded
+model Cart {
+  id        Int        @id @default(autoincrement())
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+}
 
-  @@schema("public")
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  cartId    Int
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1)
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  userId    Int
+  user      User        @relation(fields: [userId], references: [id])
+  items     OrderItem[]
+  total     Float
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1)
+  price     Float
 }
