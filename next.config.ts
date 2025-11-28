@@ -1,9 +1,15 @@
 import type { NextConfig } from "next";
 
+const hostnames = ["lh3.googleusercontent.com"];
+
 const nextConfig: NextConfig = {
   /* config options here */
+
   images: {
-    domains: ["lh3.googleusercontent.com"], // autorise les images Google
+    remotePatterns: hostnames.map((hostname) => ({
+      protocol: "https",
+      hostname,
+    })),
   },
 };
 
