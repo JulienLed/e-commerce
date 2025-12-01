@@ -54,6 +54,10 @@ export default function ShowProduct({ products, category }: ShowProductProps) {
     }
   };
 
+  /********************************************************************************************************/
+  //Il faut gérer les cas d'un cart sans connection. Il faut un cart et cartItem créé grace
+  //au GET de la DB sur les products, puis fetch tout ça si le user se connecte pou créer un user en DB
+  /********************************************************************************************************/
   const handleCart = async (productId: number) => {
     const cart = await fetch("/api/cart", {
       method: "GET",
@@ -73,10 +77,9 @@ export default function ShowProduct({ products, category }: ShowProductProps) {
         },
       });
       const cartItems = await responseCartItems.json();
-
       //Vérif si cartItem contient le produit
-      const cartItem = cartItems.find(
-        (item: CartItem) => item.productId === productId
+      const cartItem = (Object.values(cartItems) as CartItem[]).find(
+        (item) => item.productId === productId
       );
       if (cartItem) {
         const cartItemId = cartItem.id;
