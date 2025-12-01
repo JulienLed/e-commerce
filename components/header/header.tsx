@@ -4,6 +4,7 @@ import Image from "next/image";
 import { SessionProvider } from "next-auth/react";
 import AuthInfos from "./AuthInfos";
 import Menu from "./menu/menu";
+import ModeToggle from "../dark-mode";
 
 export default function Header() {
   return (
@@ -12,8 +13,12 @@ export default function Header() {
       <section id="menu" className="m-auto">
         <Menu />
       </section>
-      <section id="log-in-info" className="border-l-2">
+      <section
+        id="log-in-info"
+        className="flex flex-col items-center border-l-2"
+      >
         <SessionProvider>
+          <ModeToggle />
           <AuthInfos />
         </SessionProvider>
       </section>

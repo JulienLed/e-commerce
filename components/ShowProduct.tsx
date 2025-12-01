@@ -3,59 +3,155 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader } from "./ui/card";
-import { Cart, isCart } from "@/lib/utils";
+import { CartItem } from "@/generated/prisma/client";
 
 type Product = {
   id: number;
   name: string;
-  description: string;
+  description: string | null;
   price: number;
   stock: number;
 };
 
-export default function ShowProduct(products: Product[], category: string) {
-  const [count, setCount] = useState<number>(0);
+type ProductCount = {
+  id: number;
+  countById: number;
+};
 
-  const handleCount = (e: React.MouseEvent<HTMLButtonElement>) => {
+type ShowProductProps = {
+  products: Product[];
+  category: string;
+};
+
+export default function ShowProduct({ products, category }: ShowProductProps) {
+  const [count, setCount] = useState<ProductCount[]>([{ id: 0, countById: 0 }]);
+
+  const handleCount = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    productId: number
+  ) => {
     const buttonValue = e.currentTarget.id;
-    buttonValue === "+"
-      ? setCount((prev) => prev + 1)
-      : setCount((prev) => prev - 1);
+    if (buttonValue === "plus" && count) {
+      const product = count.find((product) => product.id === productId);
+      product
+        ? setCount((prev) =>
+            prev.map((el) =>
+              el.id === productId ? { ...el, countById: el.countById++ } : el
+            )
+          )
+        : setCount((prev) => [...prev, { id: productId, countById: 1 }]);
+    } else {
+      if (buttonValue === "minus" && count) {
+        const product = count.find((product) => product.id === productId);
+        product
+          ? setCount((prev) =>
+              prev.map((el) =>
+                el.id === productId ? { ...el, countById: el.countById-- } : el
+              )
+            )
+          : setCount((prev) => [...prev, { id: productId, countById: 0 }]);
+      }
+    }
   };
 
-  const handleCart = async (
-    productName: string,
-    productId: number,
-    productStock: number
-  ) => {
-    const cart = getCart();
-    //Vérifier la taille du cart : si moins que un -> Create sinon Update
+  const handleCart = async (productId: number) => {
+    const cart = await fetch("/api/cart", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const productCount = count.find((el) => el.id === productId)?.countById;
+
+    //Vérif si cart existe pour user
+    if (cart) {
+      //Get les cartItems
+      const responseCartItems = await fetch("/api/cartItem", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const cartItems = await responseCartItems.json();
+
+      //Vérif si cartItem contient le produit
+      const cartItem = cartItems.find(
+        (item: CartItem) => item.productId === productId
+      );
+      if (cartItem) {
+        const cartItemId = cartItem.id;
+        const responsePut = await fetch("/api/cartItem", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ cartItemId, productId, productCount }),
+        });
+        console.log("Réponse serveur pour PUT CartItem" + responsePut.json());
+      } else {
+        const responsePost = await fetch("/api/cartItem", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ productId, productCount }),
+        });
+        console.log("Réponse serveur pour POST CartItem" + responsePost.json());
+      }
+    }
+    //Si cart n'existe pas pour user
+    else if (!cart) {
+      const responseCart = await fetch("/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Réponse serveur pour POST Cart" + responseCart.json());
+      const responsePost = await fetch("/api/cartItem", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId, productCount }),
+      });
+      console.log("Réponse serveur pour POST CartItem" + responsePost.json());
+    }
   };
 
   return (
-    <Card>
+    <Card className="w-full mx-auto">
       <CardHeader>{"Nos " + category}</CardHeader>
-      <CardContent>
+      <CardContent className="grid grid-cols-5 gap-2">
         {products.map((product) => {
           return (
-            <Card>
+            <Card key={product.id}>
               <CardHeader>{product.name}</CardHeader>
               <CardContent>
-                <div>
+                <div className="flex flex-col items-center gap-2">
                   <p>{product.description}</p>
                   <p>{product.price / 100} €</p>
-                  <Button id="plus" onClick={(e) => handleCount(e)}>
-                    +
-                  </Button>
-                  <Button id="minus" onClick={(e) => handleCount(e)}>
-                    -
-                  </Button>
-                  <p>{count}</p>
+                  <div className="flex justify-between gap-2">
+                    <Button
+                      id="plus"
+                      className="w-1"
+                      onClick={(e) => handleCount(e, product.id)}
+                    >
+                      +
+                    </Button>
+                    <Button
+                      id="minus"
+                      className="w-1"
+                      onClick={(e) => handleCount(e, product.id)}
+                    >
+                      -
+                    </Button>
+                  </div>
+                  <p>{count.find((el) => el.id === product.id)?.countById}</p>
                   <Button
+                    size={"sm"}
                     id="validate"
-                    onClick={(e) =>
-                      handleCart(e, product.name, product.id, product.stock)
-                    }
+                    onClick={() => handleCart(product.id)}
                   >
                     Ajouter au panier
                   </Button>

@@ -1,9 +1,8 @@
-"use server";
-
 import { getCoils } from "@/lib/prisma";
+import ShowProduct from "@/components/ShowProduct";
 
 export default async function Page() {
   const data = await getCoils();
 
-  return <div>{JSON.stringify(data)}</div>;
+  return <ShowProduct products={data} category="Résistances" />;
 }
