@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { SessionProvider } from "next-auth/react";
 import AuthInfos from "./AuthInfos";

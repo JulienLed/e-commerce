@@ -8,6 +8,21 @@ import { NavigationMenu } from "@/components/ui/navigation-menu";
 import { NavigationMenuContent } from "@radix-ui/react-navigation-menu";
 import Link from "next/link";
 
+const menus = [
+  {
+    title: "E-Cigarettes",
+    path: "/E-Cigarette",
+  },
+  {
+    title: "E-Liquids",
+    path: "/E-Liquid",
+  },
+  {
+    title: "Coils",
+    path: "/Coil",
+  },
+];
+
 export default function Menu() {
   return (
     <NavigationMenu>
@@ -21,21 +36,15 @@ export default function Menu() {
           <NavigationMenuTrigger>Products</NavigationMenuTrigger>
           <NavigationMenuContent className="min-w-[150px]">
             <ul>
-              <li>
-                <NavigationMenuLink asChild>
-                  <Link href={"/products/e-cigarettes"}>E-Cigarette</Link>
-                </NavigationMenuLink>
-              </li>
-              <li>
-                <NavigationMenuLink asChild>
-                  <Link href={"/products/e-liquids"}>E-Liquids</Link>
-                </NavigationMenuLink>
-              </li>
-              <li>
-                <NavigationMenuLink asChild>
-                  <Link href={"/products/coils"}>Coils</Link>
-                </NavigationMenuLink>
-              </li>
+              {menus.map((menu) => {
+                return (
+                  <li key={menu.path}>
+                    <NavigationMenuLink asChild>
+                      <Link href={menu.path}>{menu.title}</Link>
+                    </NavigationMenuLink>
+                  </li>
+                );
+              })}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>

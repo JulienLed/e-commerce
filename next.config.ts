@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const hostnames = ["lh3.googleusercontent.com"];
+const hostnames = ["lh3.googleusercontent.com", "images.pexels.com"];
 
 const nextConfig: NextConfig = {
   /* config options here */
