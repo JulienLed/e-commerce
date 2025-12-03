@@ -3,9 +3,9 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
+  NavigationMenuContent,
+  NavigationMenu,
 } from "@/components/ui/navigation-menu";
-import { NavigationMenu } from "@/components/ui/navigation-menu";
-import { NavigationMenuContent } from "@radix-ui/react-navigation-menu";
 import Link from "next/link";
 
 const menus = [

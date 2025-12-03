@@ -1,14 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export default async function GET(
-  req: Request,
-  {
-    params,
-  }: {
-    params: { product: string };
-  }
-) {
+type tParams = Promise<{ product: string }>;
+
+export async function GET(req: NextRequest, { params }: { params: tParams }) {
   try {
     const { product } = await params;
     const data = await prisma.product.findMany({

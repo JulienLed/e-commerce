@@ -9,13 +9,12 @@ type ProductWithCategory = Prisma.ProductGetPayload<{
 export function ShowProduct({ data }: { data: ProductWithCategory[] }) {
   return (
     <div>
-      <p>C'est SSR ?</p>
-      {/* <Card>
+      <Card>
         <CardHeader>{data[0].Category.name}</CardHeader>
         <CardContent className="grid grid-cols-5 gap-2">
           {data.map((product) => {
             return (
-              <Card key={product.id} className="w-3xs">
+              <Card key={product.id} className="min-w-10 max-w-[200px]">
                 <CardContent>
                   <div className="flex flex-col items-center gap-2">
                     <h3>{product.name}</h3>
@@ -34,7 +33,7 @@ export function ShowProduct({ data }: { data: ProductWithCategory[] }) {
             );
           })}
         </CardContent>
-      </Card> */}
+      </Card>
     </div>
   );
 }
