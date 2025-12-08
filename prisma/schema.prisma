@@ -9,22 +9,23 @@ datasource db {
 }
 
 model Account {
+  id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime
-  User              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@id([provider, providerAccountId])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Authenticator {
@@ -43,10 +44,14 @@ model Authenticator {
 
 model Cart {
   id        Int        @id @default(autoincrement())
-  userId    String
+  userId    String?    @unique
+  guestId   String?    @unique
   createdAt DateTime   @default(now())
-  User      User       @relation(fields: [userId], references: [id])
+  User      User?      @relation(fields: [userId], references: [id])
   CartItem  CartItem[]
+
+  @@index([userId])
+  @@index([guestId])
 }
 
 model CartItem {
@@ -56,6 +61,8 @@ model CartItem {
   quantity  Int     @default(1)
   Cart      Cart    @relation(fields: [cartId], references: [id])
   Product   Product @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
 }
 
 model Category {
@@ -98,35 +105,40 @@ model Product {
 }
 
 model Session {
+  id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime
-  User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
-  id            String          @id
-  email         String          @unique
+  id            String    @id @default(cuid())
   name          String?
-  createdAt     DateTime        @default(now())
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
-  updatedAt     DateTime
-  Account       Account[]
-  Authenticator Authenticator[]
-  Cart          Cart[]
-  Order         Order[]
-  Session       Session[]
+
+  accounts Account[]
+  sessions Session[]
+
+  // Vos relations custom
+  carts          Cart[]
+  order          Order[]
+  authenticators Authenticator[]
+
+  @@index([email])
 }
 
 model VerificationToken {
   identifier String
-  token      String
+  token      String   @unique
   expires    DateTime
 
-  @@id([identifier, token])
+  @@unique([identifier, token])
 }
 
 enum OrderStatus {

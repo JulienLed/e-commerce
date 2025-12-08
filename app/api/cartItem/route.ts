@@ -1,4 +1,4 @@
-import { getUserId } from "@/lib/utils";
+import { getUserId } from "@/app/action/userId";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
@@ -6,11 +6,9 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    const userId = await getUserId();
+    const user = await getUserId();
     const cart = await prisma.cart.findFirst({
-      where: {
-        userId,
-      },
+      where: user.type === "user" ? { userId: user.id } : { guestId: user.id },
     });
     const response = await prisma.cartItem.findMany({
       where: {
@@ -23,64 +21,35 @@ export async function GET() {
   }
 }
 
-// Add a product in CartItem
+// Add or Update a product in CartItem
 
 export async function POST(req: Request) {
   try {
-    const userId = await getUserId();
+    const user = await getUserId();
+    const { productId, productCount } = await req.json();
     const cart = await prisma.cart.findFirst({
-      where: {
-        userId,
-      },
+      where: user.type === "user" ? { userId: user.id } : { guestId: user.id },
     });
-    const data = await req.json();
-    const { productId, productCount } = data;
-    if (cart) {
-      const response = await prisma.cartItem.create({
-        data: {
-          cartId: cart?.id,
+    if (!cart) return NextResponse.json("Pas de cart");
+    const cartItem = await prisma.cartItem.upsert({
+      where: {
+        cartId_productId: {
+          cartId: cart.id,
           productId,
-          quantity: productCount,
         },
-      });
-      return NextResponse.json(response);
-    } else {
-      return NextResponse.json({ error: "cart est undefined" });
-    }
-  } catch (error) {
-    return NextResponse.json(error);
-  }
-}
-
-//Update a product in CartItem
-
-export async function PUT(req: Request) {
-  try {
-    const userId = await getUserId();
-    const cart = await prisma.cart.findFirst({
-      where: {
-        userId,
       },
-    });
-    const cartItems = await prisma.cartItem.findMany({
-      where: {
-        cartId: cart?.id,
+      update: {
+        quantity: {
+          increment: productCount,
+        },
       },
-    });
-    const data = await req.json();
-    const { productId, productCount } = data;
-    const cartItem = cartItems.find(
-      (cartItem) => cartItem.productId === productId
-    );
-    const response = await prisma.cartItem.update({
-      where: {
-        id: cartItem?.id,
-      },
-      data: {
+      create: {
+        cartId: cart.id,
+        productId,
         quantity: productCount,
       },
     });
-    return NextResponse.json(response);
+    return NextResponse.json(cartItem);
   } catch (error) {
     return NextResponse.json(error);
   }

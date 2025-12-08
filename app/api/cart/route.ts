@@ -1,18 +1,26 @@
 import { NextResponse } from "next/server";
-import { getUserId } from "@/lib/utils";
+import { getUserId } from "@/app/action/userId";
 import { prisma } from "@/lib/prisma";
+
+////////////////SI ON TROUVE UN CART GUEST ET QUE USER EXISTE, ON DELETE LE GUESTID ET ON MET LE USERID
 
 //Find a Cart by User
 
 export async function GET() {
   try {
-    const userId = await getUserId();
-    const response = await prisma.cart.findFirst({
-      where: {
-        userId,
+    const user = await getUserId();
+    const cart = await prisma.cart.findFirst({
+      where: user.type === "user" ? { userId: user.id } : { guestId: user.id },
+      include: {
+        CartItem: {
+          include: {
+            Product: true,
+          },
+        },
       },
     });
-    return NextResponse.json(response);
+    return NextResponse.json(cart);
+    // }
   } catch (error) {
     return NextResponse.json(error);
   }
@@ -22,17 +30,11 @@ export async function GET() {
 
 export async function POST() {
   try {
-    const userId = await getUserId();
-    if (userId) {
-      const response = await prisma.cart.create({
-        data: {
-          userId,
-        },
-      });
-      return NextResponse.json(response);
-    } else {
-      return NextResponse.json({ error: "userId et undefined" });
-    }
+    const user = await getUserId();
+    const cart = await prisma.cart.create({
+      data: user.type === "user" ? { userId: user.id } : { guestId: user.id },
+    });
+    return NextResponse.json(cart);
   } catch (error) {
     return NextResponse.json(error);
   }
