@@ -34,7 +34,7 @@ export default function HandleCart({ productId }) {
       body: JSON.stringify({ productId, productCount: count }),
     });
     const cartItemsJson = await cartItems.json();
-    console.log("CartITemJson est : " + cartItemsJson);
+    console.log("CartITemJson est : " + JSON.stringify(cartItemsJson));
   };
 
   return (

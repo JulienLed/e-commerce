@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { getUserId } from "@/app/action/userId";
 import { prisma } from "@/lib/prisma";
 
-////////////////SI ON TROUVE UN CART GUEST ET QUE USER EXISTE, ON DELETE LE GUESTID ET ON MET LE USERID
-
 //Find a Cart by User
 
 export async function GET() {

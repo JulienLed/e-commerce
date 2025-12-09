@@ -20,6 +20,12 @@ export const config = {
   session: {
     strategy: "database",
   },
+  events: {
+    async signIn({ user, account, profile, isNewUser }) {
+      const { mergeCart } = await import("@/app/action/mergeCart");
+      await mergeCart();
+    },
+  },
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config);
