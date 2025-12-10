@@ -1,6 +1,4 @@
-import { prisma } from "@/lib/prisma";
-import { getUserId } from "@/app/action/userId";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -11,46 +9,49 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
+import { getCartByUserId } from "@/app/action/cartActions";
+import DeleteButton from "../client/cart/deleteButton";
 
-export default async function Cart() {
-  const user = await getUserId();
-  const cart = await prisma.cart.findUnique({
-    where: user.type === "guest" ? { guestId: user.id } : { userId: user.id },
-    include: {
-      CartItem: {
-        include: {
-          Product: true,
-        },
-      },
-    },
-  });
+export async function Cart() {
+  //Get Cart
+  const cart = await getCartByUserId();
   if (!cart || cart.CartItem.length < 1)
     return <Card>Pas de produits dans le panier</Card>;
+
+  //Get TotalPrice
   const handleTotalPrice = () => {
     let total = 0;
     for (let index = 0; index < cart?.CartItem.length; index++) {
-      total += cart.CartItem[index].Product.price / 100;
+      const unitPrice = cart.CartItem[index].Product.price;
+      const quantity = cart.CartItem[index].quantity;
+      total += (unitPrice * quantity) / 100;
     }
     return total;
   };
 
   return (
     <Card>
-      <CardTitle className="px-2">Votre Panier</CardTitle>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead></TableHead>
+              <TableHead colSpan={2}></TableHead>
               <TableHead>Produit</TableHead>
               <TableHead>Quantitée</TableHead>
-              <TableHead>Prix</TableHead>
+              <TableHead>Prix unitaire</TableHead>
+              <TableHead>Prix total</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {cart?.CartItem.map((item) => {
               return (
-                <TableRow>
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <DeleteButton
+                      cartId={cart.id}
+                      productId={item.Product.id}
+                    />
+                  </TableCell>
                   <TableCell>
                     <Image
                       alt={item.Product.name}
@@ -62,13 +63,16 @@ export default async function Cart() {
                   <TableCell>{item.Product.name}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
                   <TableCell>{`${item.Product.price / 100} €`}</TableCell>
+                  <TableCell>{`${
+                    (item.Product.price * item.quantity) / 100
+                  } €`}</TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={3}>Total</TableCell>
+              <TableCell colSpan={5}>Total</TableCell>
               <TableCell>{`${handleTotalPrice()} €`}</TableCell>
             </TableRow>
           </TableFooter>

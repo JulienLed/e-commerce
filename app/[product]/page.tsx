@@ -1,4 +1,4 @@
-import { ShowProduct } from "@/components/ShowProduct";
+import { ShowProduct } from "@/components/server/ShowProduct";
 import { prisma } from "@/lib/prisma";
 
 export default async function Page({

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getUserId } from "@/app/action/userId";
+import { getUserId } from "@/app/action/userActions";
 import { prisma } from "@/lib/prisma";
 
 //Find a Cart by User

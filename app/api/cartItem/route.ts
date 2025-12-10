@@ -1,4 +1,4 @@
-import { getUserId } from "@/app/action/userId";
+import { getUserId } from "@/app/action/userActions";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 

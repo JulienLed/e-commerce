@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
-export default function HandleCart({ productId }) {
+interface HandleCartProps {
+  productId: number;
+}
+
+export default function HandleCart({ productId }: HandleCartProps) {
   const [count, setCount] = useState(0);
 
   const handleCartItem = async () => {

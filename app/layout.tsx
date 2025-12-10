@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "@/components/theme-provider";
-import Header from "@/components/header/header";
+import Header from "@/components/client/header/Header";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,22 +15,15 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <header>
-            <Header />
-          </header>
+        <header>
+          <Header />
+        </header>
 
-          <main className="w-[90vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col items-center gap-5">
-            {children}
-          </main>
+        <main className="w-[90vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col items-center gap-5">
+          {children}
+        </main>
 
-          <footer></footer>
-        </ThemeProvider>
+        <footer></footer>
       </body>
     </html>
   );
