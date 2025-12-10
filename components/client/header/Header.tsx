@@ -2,6 +2,7 @@ import Image from "next/image";
 import { SessionProvider } from "next-auth/react";
 import RightMenu from "./RightMenu";
 import Menu from "./MiddleMenu";
+import { Cart } from "@/components/server/Cart";
 
 export default function Header() {
   return (
@@ -15,7 +16,7 @@ export default function Header() {
         className="flex flex-col items-center border-l-2"
       >
         <SessionProvider>
-          <RightMenu />
+          <RightMenu children={<Cart />} />
         </SessionProvider>
       </section>
     </div>

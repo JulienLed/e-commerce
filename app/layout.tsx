@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Header from "@/components/client/header/Header";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Smoke",
@@ -21,6 +22,7 @@ export default function RootLayout({
 
         <main className="w-[90vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col items-center gap-5">
           {children}
+          <Toaster />
         </main>
 
         <footer></footer>

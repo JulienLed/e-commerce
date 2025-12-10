@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import { getCartByUserId } from "@/app/action/cartActions";
-import DeleteButton from "../client/cart/deleteButton";
+import DeleteButton from "../client/cart/DeleteButton";
 
 export async function Cart() {
   //Get Cart
@@ -45,7 +45,7 @@ export async function Cart() {
           <TableBody>
             {cart?.CartItem.map((item) => {
               return (
-                <TableRow key={item.id}>
+                <TableRow key={item.id} className="h-20!">
                   <TableCell>
                     <DeleteButton
                       cartId={cart.id}
@@ -58,6 +58,7 @@ export async function Cart() {
                       src={item.Product.image || ""}
                       width={50}
                       height={50}
+                      className="object-cover rounded-sm"
                     />
                   </TableCell>
                   <TableCell>{item.Product.name}</TableCell>

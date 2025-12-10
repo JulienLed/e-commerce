@@ -31,5 +31,42 @@ export const deleteCartItem = async (cartId: number, productId: number) => {
     },
   });
   revalidatePath("/cart");
-  return { success: true };
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+  });
+  return { success: true, product };
+};
+
+//Add product to cart
+export const addproductToCart = async (productId: number, quantity: number) => {
+  const user = await getUserId();
+  const cart = await prisma.cart.upsert({
+    where: user.type === "guest" ? { guestId: user.id } : { userId: user.id },
+    update: {},
+    create: user.type === "guest" ? { guestId: user.id } : { userId: user.id },
+  });
+  const cartItem = await prisma.cartItem.upsert({
+    where: {
+      cartId_productId: {
+        cartId: cart.id,
+        productId,
+      },
+    },
+    update: {
+      quantity: {
+        increment: quantity,
+      },
+    },
+    create: {
+      cartId: cart.id,
+      productId,
+      quantity,
+    },
+  });
+  const product = await prisma.product.findUnique({
+    where: {
+      id: productId,
+    },
+  });
+  return { sucess: true, product };
 };

@@ -4,14 +4,14 @@ import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { Button } from "../../ui/button";
 import Image from "next/image";
-import { CartDialog } from "@/components/server/CartDialog";
+import { CartDialog } from "@/components/client/header/CartDialog";
 
-export default function RightMenu() {
+export default function RightMenu({ children }: { children: React.ReactNode }) {
   const { data, status } = useSession();
 
   return (
     <div className="flex flex-col items-center">
-      <CartDialog />
+      <CartDialog children={children} />
       {status === "authenticated" ? (
         <div className="flex flex-col gap-2 p-2">
           <div className="flex items-center">

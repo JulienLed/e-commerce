@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Prisma } from "@/generated/prisma/client";
-import HandleCart from "../client/HandleCart";
+import HandleCart from "../client/cart/HandleCart";
 
 type ProductWithCategory = Prisma.ProductGetPayload<{
   include: { Category: true };
