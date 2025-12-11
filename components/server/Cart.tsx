@@ -11,6 +11,7 @@ import {
 import Image from "next/image";
 import { getCartByUserId } from "@/app/action/cartActions";
 import DeleteButton from "../client/cart/DeleteButton";
+import ModifyQuantityInput from "../client/cart/ModifyQuantityInput";
 
 export async function Cart() {
   //Get Cart
@@ -26,7 +27,7 @@ export async function Cart() {
       const quantity = cart.CartItem[index].quantity;
       total += (unitPrice * quantity) / 100;
     }
-    return total;
+    return total.toFixed(2);
   };
 
   return (
@@ -37,7 +38,7 @@ export async function Cart() {
             <TableRow>
               <TableHead colSpan={2}></TableHead>
               <TableHead>Produit</TableHead>
-              <TableHead>Quantitée</TableHead>
+              <TableHead>Quantité</TableHead>
               <TableHead>Prix unitaire</TableHead>
               <TableHead>Prix total</TableHead>
             </TableRow>
@@ -62,7 +63,12 @@ export async function Cart() {
                     />
                   </TableCell>
                   <TableCell>{item.Product.name}</TableCell>
-                  <TableCell>{item.quantity}</TableCell>
+                  <TableCell>
+                    <ModifyQuantityInput
+                      productId={item.productId}
+                      quantity={item.quantity}
+                    />
+                  </TableCell>
                   <TableCell>{`${item.Product.price / 100} €`}</TableCell>
                   <TableCell>{`${
                     (item.Product.price * item.quantity) / 100

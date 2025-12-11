@@ -11,6 +11,9 @@ export const getCartByUserId = async () => {
     where: user.type === "guest" ? { guestId: user.id } : { userId: user.id },
     include: {
       CartItem: {
+        orderBy: {
+          productId: "asc",
+        },
         include: {
           Product: true,
         },
@@ -30,7 +33,7 @@ export const deleteCartItem = async (cartId: number, productId: number) => {
       },
     },
   });
-  revalidatePath("/cart");
+  revalidatePath("/");
   const product = await prisma.product.findUnique({
     where: { id: productId },
   });
@@ -68,5 +71,44 @@ export const addproductToCart = async (productId: number, quantity: number) => {
       id: productId,
     },
   });
+  revalidatePath("/");
   return { sucess: true, product };
+};
+
+//Modify quantity of product into cart
+export const modifyQuantity = async (productId: number, quantity: number) => {
+  const cart = await getCartByUserId();
+  if (!cart) return { success: false, message: "Pas de cart" };
+  if (quantity === 0) {
+    await deleteCartItem(cart.id, productId);
+  } else {
+    await prisma.cartItem.update({
+      where: {
+        cartId_productId: {
+          cartId: cart.id,
+          productId,
+        },
+      },
+      data: {
+        quantity,
+      },
+    });
+  }
+
+  revalidatePath("/");
+};
+
+//Get number of products
+export const numOfproducts = async () => {
+  const cart = await getCartByUserId();
+  if (!cart) return 0;
+  const products = await prisma.cartItem.aggregate({
+    where: {
+      cartId: cart.id,
+    },
+    _sum: {
+      quantity: true,
+    },
+  });
+  return products._sum.quantity || 0;
 };

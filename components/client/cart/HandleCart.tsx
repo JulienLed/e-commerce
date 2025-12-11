@@ -24,7 +24,11 @@ export default function HandleCart({ productId }: HandleCartProps) {
 
   return (
     <div className="flex flex-col gap-1 items-center">
-      <Input value={count} className="text-center w-[50%]" />
+      <Input
+        value={count}
+        onChange={(e) => setCount(Number(e.target.value))}
+        className="text-center w-[50%]"
+      />
       <div id="countBtn" className="flex justify-evenly w-full">
         <Button onClick={() => setCount((prev) => prev + 1)}>+</Button>
         <Button

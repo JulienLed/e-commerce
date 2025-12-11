@@ -6,12 +6,18 @@ import { Button } from "../../ui/button";
 import Image from "next/image";
 import { CartDialog } from "@/components/client/header/CartDialog";
 
-export default function RightMenu({ children }: { children: React.ReactNode }) {
+export default function RightMenu({
+  cart,
+  products,
+}: {
+  cart: React.ReactNode;
+  products: number;
+}) {
   const { data, status } = useSession();
 
   return (
     <div className="flex flex-col items-center">
-      <CartDialog children={children} />
+      <CartDialog cart={cart} products={products} />
       {status === "authenticated" ? (
         <div className="flex flex-col gap-2 p-2">
           <div className="flex items-center">
