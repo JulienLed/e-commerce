@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
+import type { Session, User } from "next-auth";
 
 export const config = {
   adapter: PrismaAdapter(prisma),
@@ -12,16 +13,16 @@ export const config = {
     }),
   ],
   callbacks: {
-    session({ session, user }) {
-      session.user.id = user.id;
+    session({ session, user }: { session: Session; user: User }) {
+      session.user!.id = user.id;
       return session;
     },
   },
   session: {
-    strategy: "database",
+    strategy: "database" as const,
   },
   events: {
-    async signIn({ user, account, profile, isNewUser }) {
+    async signIn() {
       const { mergeCart } = await import("@/app/action/mergeCart");
       await mergeCart();
     },

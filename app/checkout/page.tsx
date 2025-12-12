@@ -1,4 +1,4 @@
-import Adress from "@/components/server/checkout/Adress";
+import Adress from "@/components/client/checkout/Adress";
 
 export default function Page() {
   return <Adress />;

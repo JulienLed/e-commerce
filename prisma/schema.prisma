@@ -1,6 +1,5 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -72,30 +71,46 @@ model Category {
 }
 
 model Order {
-  id        Int         @id @default(autoincrement())
-  userId    String
-  total     Float
-  status    OrderStatus @default(PENDING)
-  createdAt DateTime    @default(now())
-  User      User        @relation(fields: [userId], references: [id])
-  OrderItem OrderItem[]
+  id                    Int         @id @default(autoincrement())
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+  userId                String?
+  User                  User?       @relation(fields: [userId], references: [id])
+  guestEmail            String?
+  shippingName          String
+  shippingSurname       String
+  shippingStreet        String
+  shippingNumStreet     String
+  shippingPostalCode    String
+  shippingCity          String
+  shippingEmail         String
+  totalAmount           Int
+  status                OrderStatus @default(PENDING)
+  stripePaymentIntentId String?     @unique
+  OrderItem             OrderItem[]
+
+  @@index([userId])
+  @@index([guestEmail])
 }
 
 model OrderItem {
-  id        Int     @id @default(autoincrement())
-  orderId   Int
-  productId Int
-  quantity  Int     @default(1)
-  price     Float
-  Order     Order   @relation(fields: [orderId], references: [id])
-  Product   Product @relation(fields: [productId], references: [id])
+  id              Int @id @default(autoincrement())
+  orderId         Int
+  productId       Int
+  quantity        Int @default(1)
+  priceAtPurchase Int
+
+  Order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  Product Product @relation(fields: [productId], references: [id])
+
+  @@unique([orderId, productId])
 }
 
 model Product {
   id          Int         @id @default(autoincrement())
   name        String
   description String?
-  price       Float
+  price       Int
   stock       Int         @default(0)
   categoryId  Int
   image       String?
