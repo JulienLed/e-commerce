@@ -41,7 +41,12 @@ export default function Adress() {
       toast.error("Problème avec la création de l'Order");
       return;
     }
-    createStripeSession(orderId);
+    const { sessionUrl, success } = await createStripeSession(order.orderId);
+    if (!sessionUrl || !success) {
+      toast.error("Erreur lors du paiement");
+      return;
+    }
+    window.location.href = sessionUrl;
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {

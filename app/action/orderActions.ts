@@ -5,6 +5,7 @@ import { getUserId } from "./userActions";
 import { getCartByUserId } from "./cartActions";
 import { addressSchema } from "@/lib/schema";
 import { FormData } from "@/lib/schema";
+import { Prisma } from "@/generated/prisma/client";
 
 export const createOrder = async (formData: FormData) => {
   const result = addressSchema.safeParse(formData);
@@ -56,3 +57,49 @@ export const createOrder = async (formData: FormData) => {
     return { success: false, message: `Erreur dans la transaction: ${error}` };
   }
 };
+
+//Get Order By OrderId
+export const getOrderByOrderId = async (orderId: number) => {
+  const order = await prisma.order.findUnique({
+    where: {
+      id: orderId,
+    },
+    include: {
+      OrderItem: {
+        include: {
+          Product: true,
+        },
+      },
+    },
+  });
+  return order;
+};
+
+//Get all orders for a userId
+export const getAllOrdersByuserId = async () => {
+  const user = await getUserId();
+  const orders = await prisma.order.findMany({
+    where: {
+      userId: user.id,
+    },
+    include: {
+      OrderItem: {
+        include: {
+          Product: true,
+        },
+      },
+    },
+  });
+  return orders;
+};
+
+//Type pour order
+export type OrderWithDetails = Prisma.OrderGetPayload<{
+  include: {
+    OrderItem: {
+      include: {
+        Product: true;
+      };
+    };
+  };
+}>;
