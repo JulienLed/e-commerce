@@ -15,10 +15,13 @@ export default function HandleCart({ productId }: HandleCartProps) {
 
   const handleCartUpdate = async () => {
     const response = await addproductToCart(productId, count);
-    if (response.sucess) {
+    if (response.success) {
       const product = response.product;
       setCount(0);
       toast.success(`${product?.name} a bien été ajouté dans le panier`);
+    } else {
+      setCount(0);
+      toast.error("Plus de produits en stock");
     }
   };
 

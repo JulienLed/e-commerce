@@ -43,6 +43,13 @@ export const deleteCartItem = async (cartId: number, productId: number) => {
 //Add product to cart
 export const addproductToCart = async (productId: number, quantity: number) => {
   const user = await getUserId();
+  const productToAdd = await prisma.product.findUnique({
+    where: {
+      id: productId,
+    },
+  });
+  if (!productToAdd || productToAdd?.stock - quantity < 0)
+    return { success: false, message: "No stock left" };
   const cart = await prisma.cart.upsert({
     where: user.type === "guest" ? { guestId: user.id } : { userId: user.id },
     update: {},
@@ -72,7 +79,7 @@ export const addproductToCart = async (productId: number, quantity: number) => {
     },
   });
   revalidatePath("/");
-  return { sucess: true, product };
+  return { success: true, product };
 };
 
 //Modify quantity of product into cart

@@ -22,3 +22,14 @@ export const getUserId = async () => {
     return { type: "guest", id: guestId };
   }
 };
+
+//Get User Infos
+export const getUserInfos = async () => {
+  const user = await getUserId();
+  const userInfos = await prisma?.user.findUnique({
+    where: {
+      id: user.id,
+    },
+  });
+  return userInfos;
+};

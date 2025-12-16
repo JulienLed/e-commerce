@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Order from "@/components/server/Order";
+import DeleteOrderButton from "@/components/client/order/DeleteOrderButton";
 
 export default async function Page() {
   const orders = await getAllOrdersByuserId();
@@ -41,9 +42,12 @@ export default async function Page() {
                 <AccordionContent>
                   <Order order={order} />
                   {order.status === "PENDING" ? (
-                    <Button className="m-2">
-                      <Link href={"/checkout"}>Procéder au paiement</Link>
-                    </Button>
+                    <div className="flex justify-evenly gap-2 m-2">
+                      <Button>
+                        <Link href={"/checkout"}>Procéder au paiement</Link>
+                      </Button>
+                      <DeleteOrderButton orderId={order.id} />
+                    </div>
                   ) : null}
                 </AccordionContent>
               </AccordionItem>

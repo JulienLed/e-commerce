@@ -11,15 +11,28 @@ import { createOrder } from "@/app/action/orderActions";
 import { createStripeSession } from "@/app/action/stripeActions";
 import { toast } from "sonner";
 
-export default function Adress() {
+type UserInfosProps =
+  | {
+      id: string;
+      email: string | null;
+      name: string | null;
+      emailVerified: Date | null;
+      image: string | null;
+    }
+  | null
+  | undefined;
+
+export default function Adress({ userInfos }: { userInfos: UserInfosProps }) {
+  const userName = userInfos?.name?.split(" ")[0];
+  const userSurname = userInfos?.name?.split(" ")[1];
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    surname: "",
+    name: userName ? userName : "",
+    surname: userSurname ? userSurname : "",
     street: "",
     numStreet: "",
     postalCode: "",
     city: "",
-    email: "",
+    email: userInfos?.email ? userInfos.email : "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 export default async function Page({
   params,
 }: {
-  params: { product: string };
+  params: Promise<{ product: string }>;
 }) {
   const { product } = await params;
   const data = await prisma.product.findMany({

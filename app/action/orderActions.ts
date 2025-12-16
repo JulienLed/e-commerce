@@ -6,7 +6,9 @@ import { getCartByUserId } from "./cartActions";
 import { addressSchema } from "@/lib/schema";
 import { FormData } from "@/lib/schema";
 import { Prisma } from "@/generated/prisma/client";
+import { revalidatePath } from "next/cache";
 
+//Create an order and delete cart
 export const createOrder = async (formData: FormData) => {
   const result = addressSchema.safeParse(formData);
   if (!result) return { success: false, message: "Données invalides" };
@@ -93,7 +95,25 @@ export const getAllOrdersByuserId = async () => {
   return orders;
 };
 
-//Type pour order
+//Delete Order
+export const deleteOrder = async (orderId: number) => {
+  const validDelOrderItem = await prisma.orderItem.deleteMany({
+    where: {
+      orderId,
+    },
+  });
+  const validDelOrder = await prisma.order.delete({
+    where: {
+      id: orderId,
+    },
+  });
+  revalidatePath("/order");
+  return validDelOrderItem
+    ? { success: true, message: `${orderId} bien supprimé` }
+    : { success: false, message: `${orderId} pas supprimé` };
+};
+
+//Type for Order
 export type OrderWithDetails = Prisma.OrderGetPayload<{
   include: {
     OrderItem: {

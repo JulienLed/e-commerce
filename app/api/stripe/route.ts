@@ -26,14 +26,38 @@ export async function POST(req: NextRequest) {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
       const orderId = parseInt(session?.metadata?.orderId!);
-      await prisma?.order.update({
+      const orderItems = await prisma?.orderItem.findMany({
         where: {
-          id: orderId,
+          orderId,
         },
-        data: {
-          status: "PAID",
-          stripePaymentIntentId: session.payment_intent as string,
+        include: {
+          Product: true,
         },
+      });
+      await prisma?.$transaction(async (tx) => {
+        await tx.order.update({
+          where: {
+            id: orderId,
+          },
+          data: {
+            status: "PAID",
+            stripePaymentIntentId: session.payment_intent as string,
+          },
+        });
+        if (!orderItems || orderItems.length < 1)
+          return new NextResponse("No products in order", { status: 404 });
+        for (let item of orderItems) {
+          await tx.product.update({
+            where: {
+              id: item.Product.id,
+            },
+            data: {
+              stock: {
+                decrement: item.quantity,
+              },
+            },
+          });
+        }
       });
     }
     return new NextResponse("OK", { status: 200 });
