@@ -95,22 +95,55 @@ export const getAllOrdersByuserId = async () => {
   return orders;
 };
 
-//Delete Order
-export const deleteOrder = async (orderId: number) => {
-  const validDelOrderItem = await prisma.orderItem.deleteMany({
-    where: {
-      orderId,
+//Get all orders count, order by status
+export const getOrdersCountByStatus = async () => {
+  const orderByStatus = await prisma.order.groupBy({
+    by: ["status"],
+    _count: {
+      status: true,
     },
   });
-  const validDelOrder = await prisma.order.delete({
+  const counts = {
+    PENDING: 0,
+    PAID: 0,
+    SHIPPED: 0,
+    DELIVERED: 0,
+    CANCELLED: 0,
+  };
+  orderByStatus.forEach(
+    (order) => (counts[order.status] = order._count.status)
+  );
+  return counts;
+};
+
+//Get Sales from orders PAID, SHIPPED and DELIVERED
+export const getSales = async () => {
+  const orders = await prisma.order.findMany({
+    where: {
+      status: {
+        in: ["DELIVERED", "PAID", "SHIPPED"],
+      },
+    },
+  });
+  let sales = 0;
+  orders.forEach((order) => (sales += order.totalAmount));
+  return sales;
+};
+
+//Cancel Order
+export const cancelOrder = async (orderId: number) => {
+  const validCancelOrder = await prisma.order.update({
     where: {
       id: orderId,
     },
+    data: {
+      status: "CANCELLED",
+    },
   });
   revalidatePath("/order");
-  return validDelOrderItem
-    ? { success: true, message: `${orderId} bien supprimé` }
-    : { success: false, message: `${orderId} pas supprimé` };
+  return validCancelOrder
+    ? { success: true, message: `${orderId} bien annulé` }
+    : { success: false, message: `${orderId} pas annulé` };
 };
 
 //Type for Order

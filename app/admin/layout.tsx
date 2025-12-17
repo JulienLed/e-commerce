@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getUserInfos } from "../action/userActions";
-import { Card, CardContent } from "@/components/ui/card";
+import NavBarAdmin from "@/components/client/dashboard/NavBarAdmin";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 
 export default async function DashboardLayout({
   children,
@@ -12,9 +13,12 @@ export default async function DashboardLayout({
     redirect("/");
   } else {
     return (
-      <Card>
-        <CardContent>{children}</CardContent>
-      </Card>
+      <SidebarProvider>
+        <NavBarAdmin />
+        <SidebarInset>
+          <main>{children}</main>
+        </SidebarInset>
+      </SidebarProvider>
     );
   }
 }

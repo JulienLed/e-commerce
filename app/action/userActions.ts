@@ -33,3 +33,17 @@ export const getUserInfos = async () => {
   });
   return userInfos;
 };
+
+//Get user count
+export const getUsersCount = async () => {
+  const userCount = await prisma?.user.count();
+  const guestCountArr = await prisma?.order.groupBy({
+    by: ["guestEmail"],
+    where: {
+      userId: null,
+      guestEmail: { not: null },
+    },
+  });
+  const guestCount = guestCountArr?.length;
+  return { userCount, guestCount };
+};
