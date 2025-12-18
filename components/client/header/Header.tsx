@@ -4,15 +4,18 @@ import RightMenu from "./RightMenu";
 import Menu from "./MiddleMenu";
 import { Cart } from "@/components/server/Cart";
 import { numOfproducts } from "@/app/action/cartActions";
+import { getUserInfos } from "@/app/action/userActions";
 
 export default async function Header() {
   const products = await numOfproducts();
+  const user = await getUserInfos();
+  const userRole = user?.role;
 
   return (
     <div className="grid grid-cols-[10%_80%_10%] py-2">
       <Image alt="logo" src={"/globe.svg"} width={75} height={75}></Image>
       <section id="menu" className="m-auto">
-        <Menu />
+        <Menu userRole={userRole || "USER"} />
       </section>
       <section
         id="log-in-info"

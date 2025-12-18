@@ -60,6 +60,23 @@ export const createOrder = async (formData: FormData) => {
   }
 };
 
+//Get All Orders
+export const getAllOrders = async (sortBy: string, order: string) => {
+  const orders = await prisma.order.findMany({
+    orderBy: {
+      [sortBy]: order,
+    },
+    include: {
+      OrderItem: {
+        include: {
+          Product: true,
+        },
+      },
+    },
+  });
+  return orders;
+};
+
 //Get Order By OrderId
 export const getOrderByOrderId = async (orderId: number) => {
   const order = await prisma.order.findUnique({

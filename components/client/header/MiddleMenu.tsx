@@ -8,6 +8,7 @@ import {
   NavigationMenuContent,
   NavigationMenu,
 } from "@/components/ui/navigation-menu";
+import { User } from "@prisma/client";
 import Link from "next/link";
 
 const menus = [
@@ -25,7 +26,7 @@ const menus = [
   },
 ];
 
-export default function Menu() {
+export default function Menu({ userRole }: { userRole: string }) {
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -36,7 +37,7 @@ export default function Menu() {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Products</NavigationMenuTrigger>
-          <NavigationMenuContent className="min-w-[150px]">
+          <NavigationMenuContent className="min-w-37.5">
             <ul>
               {menus.map((menu) => {
                 return (
@@ -50,6 +51,13 @@ export default function Menu() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
+        {userRole === "ADMIN" && (
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link href={"/admin"}>Admin</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        )}
       </NavigationMenuList>
     </NavigationMenu>
   );

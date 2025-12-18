@@ -10,7 +10,6 @@ import {
   TableCell,
   TableFooter,
 } from "@/components/ui/table";
-import { SearchParams } from "next/dist/server/request/search-params";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
