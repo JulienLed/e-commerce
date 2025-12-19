@@ -7,6 +7,7 @@ import { addressSchema } from "@/lib/schema";
 import { FormData } from "@/lib/schema";
 import { Prisma } from "@/generated/prisma/client";
 import { revalidatePath } from "next/cache";
+import { OrderStatus } from "@prisma/client";
 
 //Create an order and delete cart
 export const createOrder = async (formData: FormData) => {
@@ -161,6 +162,19 @@ export const cancelOrder = async (orderId: number) => {
   return validCancelOrder
     ? { success: true, message: `${orderId} bien annulé` }
     : { success: false, message: `${orderId} pas annulé` };
+};
+
+//Update status
+export const updateStatus = async (orderId: number, status: OrderStatus) => {
+  const orderUpdate = await prisma.order.update({
+    where: {
+      id: orderId,
+    },
+    data: {
+      status,
+    },
+  });
+  return orderUpdate;
 };
 
 //Type for Order

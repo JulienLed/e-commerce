@@ -1,15 +1,14 @@
 import { getAllOrders } from "@/app/action/orderActions";
 import OrderButton from "@/components/client/dashboard/OrderButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import Order from "@/components/server/Order";
+import ModifyStatusInput from "@/components/client/dashboard/ModifyStatusInput";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export default async function Page({
   searchParams,
@@ -34,30 +33,41 @@ export default async function Page({
         <CardTitle>Les commandes</CardTitle>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {headKeys.map((key, index) => (
-                <TableHead key={index}>
-                  <OrderButton UrlParams={key} />
-                </TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {orders.map((order) => {
-              return (
-                <TableRow key={order.id}>
-                  <TableCell>{order.userId}</TableCell>
-                  <TableCell>{order.shippingName}</TableCell>
-                  <TableCell>{order.shippingSurname}</TableCell>
-                  <TableCell>{order.shippingEmail}</TableCell>
-                  <TableCell>{order.status}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+        <section
+          id="header"
+          className="grid grid-cols-[20%_17%_17%_17%_30%] w-full text-center"
+        >
+          {headKeys.map((key, index) => (
+            <div key={index}>
+              <OrderButton UrlParams={key} />
+            </div>
+          ))}
+        </section>
+        <Accordion type="single" collapsible>
+          {orders.map((order) => {
+            return (
+              <AccordionItem key={order.id} value={`order - ${order.id}`}>
+                <AccordionTrigger>
+                  <section
+                    id="body"
+                    className="grid grid-cols-[20%_17%_17%_17%_30%] w-full text-center"
+                  >
+                    <div className="overflow-scroll">{order.userId}</div>
+                    <div>{order.shippingName}</div>
+                    <div>{order.shippingSurname}</div>
+                    <div>{order.shippingEmail}</div>
+                    <div>
+                      <ModifyStatusInput order={order} />
+                    </div>
+                  </section>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <Order order={order} />
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
       </CardContent>
     </Card>
   );
