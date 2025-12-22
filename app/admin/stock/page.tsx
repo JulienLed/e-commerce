@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUserInfos } from "@/app/action/userActions";
-import { getAllProducts } from "@/app/action/productAction";
+import { getAllProducts } from "@/app/action/productActions";
 import {
   Table,
   TableBody,
@@ -11,13 +11,12 @@ import {
 } from "@/components/ui/table";
 import ModifyStockInput from "@/components/client/dashboard/ModifyStockInput";
 import ModifyPriceInput from "@/components/client/dashboard/ModifyPriceInput";
+import DeleteProduct from "@/components/client/dashboard/DeleteProduct";
+import NewProduct from "@/components/client/dashboard/NewProduct";
+import NewCategory from "@/components/client/dashboard/NewCategory";
+import DeleteCategory from "@/components/client/dashboard/DeleteCategory";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ sortBy: string; order: string }>;
-}) {
-  const { sortBy, order } = await params;
+export default async function Page() {
   const user = await getUserInfos();
   const allProducts = await getAllProducts();
 
@@ -28,11 +27,15 @@ export default async function Page({
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-2">
+          <NewCategory />
           {Object.entries(allProducts).map(([category, products]) => {
             return (
               <Card key={category}>
                 <CardHeader>
-                  <CardTitle>{category}</CardTitle>
+                  <div className="flex justify-between">
+                    <CardTitle>{category}</CardTitle>
+                    <DeleteCategory categoryId={products.categoryId} />
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <Table>
@@ -44,19 +47,28 @@ export default async function Page({
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {products.map((product) => {
-                        return (
-                          <TableRow key={product.id}>
-                            <TableCell>{product.name}</TableCell>
-                            <TableCell>
-                              <ModifyPriceInput product={product} />
-                            </TableCell>
-                            <TableCell>
-                              <ModifyStockInput product={product} />
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
+                      {products.products.length >= 1 &&
+                        products.products.map((product) => {
+                          return (
+                            <TableRow key={product.id}>
+                              <TableCell>{product.name}</TableCell>
+                              <TableCell>
+                                <ModifyPriceInput product={product} />
+                              </TableCell>
+                              <TableCell>
+                                <ModifyStockInput product={product} />
+                              </TableCell>
+                              <TableCell>
+                                <DeleteProduct product={product} />
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      <TableRow>
+                        <TableCell colSpan={4} className="text-center">
+                          <NewProduct categoryId={products.categoryId} />
+                        </TableCell>
+                      </TableRow>
                     </TableBody>
                   </Table>
                 </CardContent>

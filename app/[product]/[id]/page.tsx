@@ -1,4 +1,4 @@
-import { getProduct } from "@/app/action/productAction";
+import { getProduct } from "@/app/action/productActions";
 import HandleCart from "@/components/client/cart/HandleCart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";

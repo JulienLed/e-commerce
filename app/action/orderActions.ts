@@ -174,6 +174,7 @@ export const updateStatus = async (orderId: number, status: OrderStatus) => {
       status,
     },
   });
+  revalidatePath("/admin/order");
   return orderUpdate;
 };
 

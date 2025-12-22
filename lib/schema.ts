@@ -23,3 +23,12 @@ export const addressSchema = z.object({
 });
 
 export type FormData = z.infer<typeof addressSchema>;
+
+export type FormDataCreateProduct = {
+  name: string;
+  description: string;
+  price: number | string;
+  stock: number;
+  image: string;
+  categoryId: number;
+};

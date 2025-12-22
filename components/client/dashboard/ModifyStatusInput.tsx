@@ -59,7 +59,10 @@ export default function ModifyStatusInput({ order }: { order: Order }) {
       )}
       <div
         className="border-border bg-foreground text-accent rounded-lg p-2 hover:bg-accent-foreground hover:cursor-pointer"
-        onClick={() => handleOnClick()}
+        onClick={(e) => {
+          handleOnClick();
+          e.stopPropagation();
+        }}
       >
         Valider
       </div>
