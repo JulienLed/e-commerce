@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { SessionProvider } from "next-auth/react";
 import RightMenu from "./RightMenu";
-import Menu from "./MiddleMenu";
+import MiddelMenu from "./MiddleMenu";
+import Search from "./Search";
 import { Cart } from "@/components/server/Cart";
 import { numOfproducts } from "@/app/action/cartActions";
 import { getUserInfos } from "@/app/action/userActions";
@@ -14,10 +15,15 @@ export default async function Header() {
   const userRole = user?.role;
 
   return (
-    <div className="grid grid-cols-[10%_80%_10%] py-2">
-      <Image alt="logo" src={"/globe.svg"} width={75} height={75}></Image>
+    <div className="grid grid-cols-[10%_auto_20%_10%] items-center py-2">
+      <section id="logo" className="justify-self-center">
+        <Image alt="logo" src={"/globe.svg"} width={50} height={50} />
+      </section>
       <section id="menu" className="m-auto">
-        <Menu userRole={userRole || "USER"} categories={categories} />
+        <MiddelMenu userRole={userRole || "USER"} categories={categories} />
+      </section>
+      <section id="search">
+        <Search />
       </section>
       <section
         id="log-in-info"

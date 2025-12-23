@@ -11,7 +11,7 @@ import {
 import { Category } from "@prisma/client";
 import Link from "next/link";
 
-export default function Menu({
+export default function MiddelMenu({
   userRole,
   categories,
 }: {

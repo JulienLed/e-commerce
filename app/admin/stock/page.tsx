@@ -15,6 +15,8 @@ import DeleteProduct from "@/components/client/dashboard/DeleteProduct";
 import NewProduct from "@/components/client/dashboard/NewProduct";
 import NewCategory from "@/components/client/dashboard/NewCategory";
 import DeleteCategory from "@/components/client/dashboard/DeleteCategory";
+import ModifyNameInput from "@/components/client/dashboard/ModifyNameInput";
+import ModifyImageProduct from "@/components/client/dashboard/ModifyImageProduct";
 
 export default async function Page() {
   const user = await getUserInfos();
@@ -41,6 +43,7 @@ export default async function Page() {
                   <Table>
                     <TableHeader>
                       <TableRow>
+                        <TableHead>Image</TableHead>
                         <TableHead>Produit</TableHead>
                         <TableHead>Prix (en centimes)</TableHead>
                         <TableHead>Stock</TableHead>
@@ -51,7 +54,12 @@ export default async function Page() {
                         products.products.map((product) => {
                           return (
                             <TableRow key={product.id}>
-                              <TableCell>{product.name}</TableCell>
+                              <TableCell>
+                                <ModifyImageProduct product={product} />
+                              </TableCell>
+                              <TableCell>
+                                <ModifyNameInput product={product} />
+                              </TableCell>
                               <TableCell>
                                 <ModifyPriceInput product={product} />
                               </TableCell>

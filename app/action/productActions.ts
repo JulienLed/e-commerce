@@ -17,6 +17,39 @@ export const getProduct = async (productId: number) => {
   return product;
 };
 
+//Get Products by Category name
+export const getProductsByCategory = async (category: string) => {
+  const products = await prisma.product.findMany({
+    where: {
+      Category: {
+        name: category,
+      },
+    },
+    include: {
+      Category: true,
+    },
+  });
+
+  return { products };
+};
+
+//Get products by string includes
+export const getProductsByString = async (str: string) => {
+  const products = await prisma.product.findMany({
+    take: 5,
+    where: {
+      name: {
+        contains: str,
+        mode: "insensitive",
+      },
+    },
+    include: {
+      Category: true,
+    },
+  });
+  return products;
+};
+
 //Get All products order by Category
 export const getAllProducts = async () => {
   const allProducts = await prisma.product.findMany({
@@ -70,6 +103,44 @@ export const updatePriceProduct = async (productId: number, price: number) => {
     },
   });
   return validUpdateProduct;
+};
+
+//Update Name
+export const updateNameProduct = async (
+  productId: number,
+  productName: string
+) => {
+  const product = await prisma.product.update({
+    where: {
+      id: productId,
+    },
+    data: {
+      name: productName,
+    },
+  });
+  return product;
+};
+
+//Update image url
+export const updateImageUrlProduct = async (
+  productId: number,
+  newUrl: string
+) => {
+  if (!newUrl.includes("images.pexels.com"))
+    return {
+      success: false,
+      message:
+        "Mauvaise URL. Veuillez utiliser une image présente sur www.pexels.com",
+    };
+  const product = await prisma.product.update({
+    where: {
+      id: productId,
+    },
+    data: {
+      image: newUrl,
+    },
+  });
+  return { success: true, product };
 };
 
 //Delete product

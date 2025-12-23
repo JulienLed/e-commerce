@@ -1,3 +1,4 @@
+import { Prisma } from "@/generated/prisma/client";
 import { z } from "zod";
 
 export const addressSchema = z.object({
@@ -32,3 +33,7 @@ export type FormDataCreateProduct = {
   image: string;
   categoryId: number;
 };
+
+export type ProductWithCategory = Prisma.ProductGetPayload<{
+  include: { Category: true };
+}>;

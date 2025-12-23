@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 
-//get All categories
+//Get All categories
 export const getAllCategories = async () => {
   const allCategories = await prisma.category.findMany();
   return allCategories;
