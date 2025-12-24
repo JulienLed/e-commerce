@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { addressSchema } from "@/lib/schema";
 import { FormData } from "@/lib/schema";
-import { createOrder } from "@/app/action/orderActions";
-import { createStripeSession } from "@/app/action/stripeActions";
+import { createOrder } from "@/app/_action/orderActions";
+import { createStripeSession } from "@/app/_action/stripeActions";
 import { toast } from "sonner";
 
 type UserInfosProps =
@@ -23,6 +23,7 @@ type UserInfosProps =
   | undefined;
 
 export default function Adress({ userInfos }: { userInfos: UserInfosProps }) {
+  const [isPending, startTransition] = useTransition();
   const userName = userInfos?.name?.split(" ")[0];
   const userSurname = userInfos?.name?.split(" ")[1];
   const [formData, setFormData] = useState<FormData>({
@@ -37,29 +38,31 @@ export default function Adress({ userInfos }: { userInfos: UserInfosProps }) {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const result = addressSchema.safeParse(formData);
-    const newErrors: Record<string, string> = {};
-    if (!result.success) {
-      result.error.issues.forEach((issue) => {
-        newErrors[issue.path[0] as string] = issue.message;
-      });
-      setErrors(newErrors);
-      return;
-    }
-    setErrors({});
-    const order = await createOrder(formData);
-    if (!order.success || !order.orderId) {
-      toast.error("Problème avec la création de l'Order");
-      return;
-    }
-    const { sessionUrl, success } = await createStripeSession(order.orderId);
-    if (!sessionUrl || !success) {
-      toast.error("Erreur lors du paiement");
-      return;
-    }
-    window.location.href = sessionUrl;
+    startTransition(async () => {
+      const result = addressSchema.safeParse(formData);
+      const newErrors: Record<string, string> = {};
+      if (!result.success) {
+        result.error.issues.forEach((issue) => {
+          newErrors[issue.path[0] as string] = issue.message;
+        });
+        setErrors(newErrors);
+        return;
+      }
+      setErrors({});
+      const order = await createOrder(formData);
+      if (!order.success || !order.orderId) {
+        toast.error("Problème avec la création de l'Order");
+        return;
+      }
+      const { sessionUrl, success } = await createStripeSession(order.orderId);
+      if (!sessionUrl || !success) {
+        toast.error("Erreur lors du paiement");
+        return;
+      }
+      window.location.href = sessionUrl;
+    });
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,7 +117,8 @@ export default function Adress({ userInfos }: { userInfos: UserInfosProps }) {
                   id={item.id}
                   value={formData[item.id]}
                   onChange={(e) => handleOnChange(e)}
-                ></Input>
+                  disabled={isPending}
+                />
                 {errors[item.id] && (
                   <p className="py-0 text-[0.8rem] text-red-500">
                     {errors[item.id]}
@@ -123,7 +127,7 @@ export default function Adress({ userInfos }: { userInfos: UserInfosProps }) {
               </div>
             );
           })}
-          <Button type="submit">Valider</Button>
+          <Button type="submit">{isPending ? "Envoi..." : "Valider"}</Button>
         </form>
       </CardContent>
     </Card>

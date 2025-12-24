@@ -1,6 +1,6 @@
 "use client";
 
-import { updateImageUrlProduct } from "@/app/action/productActions";
+import { updateImageUrlProduct } from "@/app/_action/productActions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,22 +13,25 @@ import { Input } from "@/components/ui/input";
 import { Product } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 export default function ModifyImageProduct({ product }: { product: Product }) {
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const [isHover, setIsHover] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [newUrl, setNewUrl] = useState<string>(product.image || "");
 
-  const handleOnClick = async () => {
-    const response = await updateImageUrlProduct(product.id, newUrl);
-    response.success
-      ? toast.message(`L'url de l'image a bien été changée`)
-      : toast.error(response.message);
-    setOpen(false);
-    router.refresh();
+  const handleOnClick = () => {
+    startTransition(async () => {
+      const response = await updateImageUrlProduct(product.id, newUrl);
+      response.success
+        ? toast.message(`L'url de l'image a bien été changée`)
+        : toast.error(response.message);
+      setOpen(false);
+      router.refresh();
+    });
   };
   return (
     <div
@@ -37,8 +40,8 @@ export default function ModifyImageProduct({ product }: { product: Product }) {
       onMouseLeave={() => setIsHover(false)}
     >
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <div>
+        <DialogTrigger asChild disabled={isPending}>
+          <div className="hover:cursor-pointer">
             <Image
               alt={product.name}
               src={product.image || ""}
@@ -46,12 +49,12 @@ export default function ModifyImageProduct({ product }: { product: Product }) {
               height={100}
               className="rounded-md"
             />
-            <div
-              className="absolute top-1 left-1 transition-all duration-200 ease-in-out"
+            <span
+              className="absolute top-0 bg-primary-foreground rounded-lg p-1 transition-all duration-200 ease-in-out"
               style={isHover ? { opacity: 1 } : { opacity: 0.3 }}
             >
-              <Button>Modifier</Button>
-            </div>
+              {isPending ? "Modification" : "Modifier"}
+            </span>
           </div>
         </DialogTrigger>
         <DialogContent>

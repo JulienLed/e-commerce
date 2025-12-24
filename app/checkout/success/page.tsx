@@ -1,5 +1,5 @@
-import { getOrderByOrderId } from "@/app/action/orderActions";
-import { getUserInfos } from "@/app/action/userActions";
+import { getOrderByOrderId } from "@/app/_action/orderActions";
+import { getUserInfos } from "@/app/_action/userActions";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,

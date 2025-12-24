@@ -23,7 +23,7 @@ export const config = {
   },
   events: {
     async signIn() {
-      const { mergeCart } = await import("@/app/action/mergeCart");
+      const { mergeCart } = await import("@/app/_action/mergeCart");
       await mergeCart();
     },
   },

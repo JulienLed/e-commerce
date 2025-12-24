@@ -9,7 +9,7 @@ import {
   TableHeader,
 } from "../ui/table";
 import Image from "next/image";
-import { OrderWithDetails } from "@/app/action/orderActions";
+import { OrderWithDetails } from "@/app/_action/orderActions";
 
 export default async function Order({ order }: { order: OrderWithDetails }) {
   return (

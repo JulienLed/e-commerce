@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
+import { sendOrderConfirmationEMail } from "@/app/_action/resendAction";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -59,6 +60,14 @@ export async function POST(req: NextRequest) {
           });
         }
       });
+      const emailResult = await sendOrderConfirmationEMail(orderId);
+
+      if (!emailResult.success) {
+        console.error(
+          "⚠️ Email non envoyé, mais paiement validé:",
+          emailResult.error
+        );
+      }
     }
     return new NextResponse("OK", { status: 200 });
   } catch (error) {

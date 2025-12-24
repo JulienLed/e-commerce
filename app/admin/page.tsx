@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getUserInfos, getUsersCount } from "../action/userActions";
-import { getOrdersCountByStatus, getSales } from "../action/orderActions";
+import { getUserInfos, getUsersCount } from "../_action/userActions";
+import { getOrdersCountByStatus, getSales } from "../_action/orderActions";
 
 export default async function Page() {
   const user = await getUserInfos();

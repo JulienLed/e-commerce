@@ -1,7 +1,9 @@
-import { getProduct } from "@/app/action/productActions";
+import { getProduct } from "@/app/_action/productActions";
 import HandleCart from "@/components/client/cart/HandleCart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
+import { notFound } from "next/navigation";
+import { prisma } from "@/lib/prisma";
 
 export default async function Page({
   params,
@@ -9,13 +11,9 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const product = await getProduct(Number(id));
-  if (!product)
-    return (
-      <Card>
-        <CardContent>Pas de produit</CardContent>
-      </Card>
-    );
+  const response = await getProduct(Number(id));
+  if (!response.success || !response.data) notFound();
+  const product = response.data;
   return (
     <Card className="shadow-2xl">
       <CardHeader>

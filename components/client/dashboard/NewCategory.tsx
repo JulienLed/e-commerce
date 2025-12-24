@@ -1,6 +1,6 @@
 "use client";
 
-import { createCategory } from "@/app/action/categoryActions";
+import { createCategory } from "@/app/_action/categoryActions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,27 +13,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 export default function NewCategory() {
+  const [isPending, startTransition] = useTransition();
   const rooter = useRouter();
   const [open, setOpen] = useState<boolean>(false);
   const [newCategory, setNewCategory] = useState<string>("");
-  const handleOnClick = async () => {
-    const response = await createCategory(newCategory);
-    response
-      ? toast.message(`Catégorie ${response.name} a bien été créée`)
-      : toast.error("Erreur lors de la création de la catégorie");
-    rooter.refresh();
-    setOpen(false);
+  const handleOnClick = () => {
+    startTransition(async () => {
+      const response = await createCategory(newCategory);
+      response
+        ? toast.message(`Catégorie ${response.name} a bien été créée`)
+        : toast.error("Erreur lors de la création de la catégorie");
+      rooter.refresh();
+      setOpen(false);
+    });
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button disabled={isPending}>
           <Plus />
-          <span>Nouvelle Catégorie</span>
+          <span>
+            {isPending
+              ? "Création nouvelle catégorie..."
+              : "Nouvelle Catégorie"}
+          </span>
         </Button>
       </DialogTrigger>
       <DialogContent>

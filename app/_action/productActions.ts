@@ -6,6 +6,7 @@ import { FormDataCreateProduct } from "@/lib/schema";
 
 //Get product by productId
 export const getProduct = async (productId: number) => {
+  if (isNaN(productId)) return { success: false, data: undefined };
   const product = await prisma.product.findUnique({
     where: {
       id: productId,
@@ -14,7 +15,8 @@ export const getProduct = async (productId: number) => {
       Category: true,
     },
   });
-  return product;
+  if (!product) return { success: false, data: undefined };
+  return { success: true, data: product };
 };
 
 //Get Products by Category name

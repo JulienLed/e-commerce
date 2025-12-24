@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getUserInfos } from "@/app/action/userActions";
-import { getAllProducts } from "@/app/action/productActions";
+import { getUserInfos } from "@/app/_action/userActions";
+import { getAllProducts } from "@/app/_action/productActions";
 import {
   Table,
   TableBody,
@@ -17,6 +17,8 @@ import NewCategory from "@/components/client/dashboard/NewCategory";
 import DeleteCategory from "@/components/client/dashboard/DeleteCategory";
 import ModifyNameInput from "@/components/client/dashboard/ModifyNameInput";
 import ModifyImageProduct from "@/components/client/dashboard/ModifyImageProduct";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 export default async function Page() {
   const user = await getUserInfos();
@@ -40,45 +42,47 @@ export default async function Page() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Image</TableHead>
-                        <TableHead>Produit</TableHead>
-                        <TableHead>Prix (en centimes)</TableHead>
-                        <TableHead>Stock</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {products.products.length >= 1 &&
-                        products.products.map((product) => {
-                          return (
-                            <TableRow key={product.id}>
-                              <TableCell>
-                                <ModifyImageProduct product={product} />
-                              </TableCell>
-                              <TableCell>
-                                <ModifyNameInput product={product} />
-                              </TableCell>
-                              <TableCell>
-                                <ModifyPriceInput product={product} />
-                              </TableCell>
-                              <TableCell>
-                                <ModifyStockInput product={product} />
-                              </TableCell>
-                              <TableCell>
-                                <DeleteProduct product={product} />
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      <TableRow>
-                        <TableCell colSpan={4} className="text-center">
-                          <NewProduct categoryId={products.categoryId} />
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                  <Suspense fallback={<Loading />}>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Image</TableHead>
+                          <TableHead>Produit</TableHead>
+                          <TableHead>Prix (en centimes)</TableHead>
+                          <TableHead>Stock</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {products.products.length >= 1 &&
+                          products.products.map((product) => {
+                            return (
+                              <TableRow key={product.id}>
+                                <TableCell>
+                                  <ModifyImageProduct product={product} />
+                                </TableCell>
+                                <TableCell>
+                                  <ModifyNameInput product={product} />
+                                </TableCell>
+                                <TableCell>
+                                  <ModifyPriceInput product={product} />
+                                </TableCell>
+                                <TableCell>
+                                  <ModifyStockInput product={product} />
+                                </TableCell>
+                                <TableCell>
+                                  <DeleteProduct product={product} />
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        <TableRow>
+                          <TableCell colSpan={4} className="text-center">
+                            <NewProduct categoryId={products.categoryId} />
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </Suspense>
                 </CardContent>
               </Card>
             );

@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import { getCartByUserId } from "@/app/action/cartActions";
+import { getCartByUserId } from "@/app/_action/cartActions";
 import DeleteButton from "../client/cart/DeleteButton";
 import ModifyQuantityInput from "../client/cart/ModifyQuantityInput";
 

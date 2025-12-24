@@ -4,9 +4,9 @@ import RightMenu from "./RightMenu";
 import MiddelMenu from "./MiddleMenu";
 import Search from "./Search";
 import { Cart } from "@/components/server/Cart";
-import { numOfproducts } from "@/app/action/cartActions";
-import { getUserInfos } from "@/app/action/userActions";
-import { getAllCategories } from "@/app/action/categoryActions";
+import { numOfproducts } from "@/app/_action/cartActions";
+import { getUserInfos } from "@/app/_action/userActions";
+import { getAllCategories } from "@/app/_action/categoryActions";
 
 export default async function Header() {
   const products = await numOfproducts();

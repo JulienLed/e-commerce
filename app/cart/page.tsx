@@ -1,7 +1,7 @@
 import { Cart } from "@/components/server/Cart";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { getCartByUserId } from "../action/cartActions";
+import { getCartByUserId } from "../_action/cartActions";
 
 export default async function Page() {
   const cart = await getCartByUserId();

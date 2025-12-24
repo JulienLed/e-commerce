@@ -1,6 +1,6 @@
 "use client";
 
-import { updateStatus } from "@/app/action/orderActions";
+import { updateStatus } from "@/app/_action/orderActions";
 import {
   NativeSelect,
   NativeSelectOption,
@@ -11,25 +11,28 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Order, OrderStatus } from "@prisma/client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { CircleAlert } from "lucide-react";
 
 export default function ModifyStatusInput({ order }: { order: Order }) {
+  const [isPending, startTransition] = useTransition();
   const [statusInput, setStatusInput] = useState<OrderStatus>(order.status);
   const status = Object.values(OrderStatus);
 
-  const handleOnClick = async () => {
-    const response = await updateStatus(order.id, statusInput);
-    if (response.status === statusInput) {
-      toast.message(
-        `Status ${response.status} bien appliqué à la commande ${order.id}`
-      );
-    } else {
-      toast.error(
-        `Status ${response.status} pas appliqué à la commande ${order.id}`
-      );
-    }
+  const handleOnClick = () => {
+    startTransition(async () => {
+      const response = await updateStatus(order.id, statusInput);
+      if (response.status === statusInput) {
+        toast.message(
+          `Status ${response.status} bien appliqué à la commande ${order.id}`
+        );
+      } else {
+        toast.error(
+          `Status ${response.status} pas appliqué à la commande ${order.id}`
+        );
+      }
+    });
   };
 
   return (
@@ -40,6 +43,7 @@ export default function ModifyStatusInput({ order }: { order: Order }) {
         onChange={(e) => {
           setStatusInput(e.target.value as OrderStatus);
         }}
+        disabled={isPending}
       >
         {status.map((item) => {
           return (

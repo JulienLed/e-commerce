@@ -1,5 +1,6 @@
 import { Prisma } from "@/generated/prisma/client";
 import { z } from "zod";
+import { OrderStatus } from "@prisma/client";
 
 export const addressSchema = z.object({
   name: z
@@ -37,3 +38,39 @@ export type FormDataCreateProduct = {
 export type ProductWithCategory = Prisma.ProductGetPayload<{
   include: { Category: true };
 }>;
+
+export type OrderWithUserInfos = {
+  OrderItem: ({
+    Product: {
+      id: number;
+      name: string;
+      image: string | null;
+      description: string | null;
+      price: number;
+      stock: number;
+      categoryId: number;
+    };
+  } & {
+    id: number;
+    orderId: number;
+    productId: number;
+    quantity: number;
+    priceAtPurchase: number;
+  })[];
+} & {
+  id: number;
+  userId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  guestEmail: string | null;
+  shippingName: string;
+  shippingSurname: string;
+  shippingStreet: string;
+  shippingNumStreet: string;
+  shippingPostalCode: string;
+  shippingCity: string;
+  shippingEmail: string;
+  totalAmount: number;
+  status: OrderStatus;
+  stripePaymentIntentId: string | null;
+};

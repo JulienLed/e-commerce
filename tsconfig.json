@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "app/middelware.ts", "app/[category]/loading.tsx"  ],
   "exclude": ["node_modules"]
 }

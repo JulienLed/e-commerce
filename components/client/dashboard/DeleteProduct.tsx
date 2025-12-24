@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteProduct } from "@/app/action/productActions";
+import { deleteProduct } from "@/app/_action/productActions";
 import {
   Dialog,
   DialogClose,
@@ -10,18 +10,21 @@ import {
 } from "@/components/ui/dialog";
 import { Product } from "@prisma/client";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 export default function DeleteProduct({ product }: { product: Product }) {
+  const [isPending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
-  const handleOnClick = async () => {
-    await deleteProduct(product.id);
-    toast.message(`Le produit a bien été supprimé`);
+  const handleOnClick = () => {
+    startTransition(async () => {
+      await deleteProduct(product.id);
+      toast.message(`Le produit a bien été supprimé`);
+    });
   };
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger disabled={isPending}>
         <div className="hover:text-red-500">
           <X size={20} />
         </div>

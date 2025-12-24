@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Plus } from "lucide-react";
 import { Info } from "lucide-react";
 import {
@@ -14,7 +14,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { FormDataCreateProduct } from "@/lib/schema";
-import { createProduct } from "@/app/action/productActions";
+import { createProduct } from "@/app/_action/productActions";
 import { toast } from "sonner";
 import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
 import { TooltipContent } from "@radix-ui/react-tooltip";
@@ -22,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
 
 export default function NewProduct({ categoryId }: { categoryId: number }) {
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [newProduct, setNewproduct] = useState<FormDataCreateProduct>({
@@ -32,28 +33,32 @@ export default function NewProduct({ categoryId }: { categoryId: number }) {
     image: "",
     categoryId,
   });
-  const handleOnClick = async () => {
-    const response = await createProduct(newProduct);
-    response
-      ? toast.message(`${response.name} a bien été créé`)
-      : toast.error("Erreur lors de la création du produit.");
-    setNewproduct({
-      name: "",
-      description: "",
-      price: "",
-      stock: 0,
-      image: "",
-      categoryId,
+  const handleOnClick = () => {
+    startTransition(async () => {
+      const response = await createProduct(newProduct);
+      response
+        ? toast.message(`${response.name} a bien été créé`)
+        : toast.error("Erreur lors de la création du produit.");
+      setNewproduct({
+        name: "",
+        description: "",
+        price: "",
+        stock: 0,
+        image: "",
+        categoryId,
+      });
+      router.refresh();
+      setOpen(false);
     });
-    router.refresh();
-    setOpen(false);
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button disabled={isPending}>
           <Plus />
-          <span>Ajouter un nouveau produit</span>
+          <span>
+            {isPending ? "Ajout du produit..." : "Ajouter un nouveau produit"}
+          </span>
         </Button>
       </DialogTrigger>
       <DialogContent>

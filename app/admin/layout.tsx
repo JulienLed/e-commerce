@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getUserInfos } from "../action/userActions";
+import { getUserInfos } from "../_action/userActions";
 import NavBarAdmin from "@/components/client/dashboard/NavBarAdmin";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 

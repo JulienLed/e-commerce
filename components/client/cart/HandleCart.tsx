@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { toast } from "sonner";
-import { addproductToCart } from "@/app/action/cartActions";
+import { addproductToCart } from "@/app/_action/cartActions";
 
 interface HandleCartProps {
   productId: number;
@@ -12,17 +12,20 @@ interface HandleCartProps {
 
 export default function HandleCart({ productId }: HandleCartProps) {
   const [count, setCount] = useState(0);
+  const [isPending, startTransition] = useTransition();
 
-  const handleCartUpdate = async () => {
-    const response = await addproductToCart(productId, count);
-    if (response.success) {
-      const product = response.product;
-      setCount(0);
-      toast.success(`${product?.name} a bien été ajouté dans le panier`);
-    } else {
-      setCount(0);
-      toast.error("Plus de produits en stock");
-    }
+  const handleCartUpdate = () => {
+    startTransition(async () => {
+      const response = await addproductToCart(productId, count);
+      if (response.success) {
+        const product = response.product;
+        setCount(0);
+        toast.success(`${product?.name} a bien été ajouté dans le panier`);
+      } else {
+        setCount(0);
+        toast.error("Plus de produits en stock");
+      }
+    });
   };
 
   return (
@@ -41,7 +44,9 @@ export default function HandleCart({ productId }: HandleCartProps) {
         </Button>
       </div>
 
-      <Button onClick={() => handleCartUpdate()}>Ajouter au panier</Button>
+      <Button onClick={() => handleCartUpdate()} disabled={isPending}>
+        {isPending ? `Ajout en cours...` : `Ajouter au panier`}
+      </Button>
     </div>
   );
 }
