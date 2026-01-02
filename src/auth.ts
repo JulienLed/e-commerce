@@ -1,12 +1,33 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import type { Session, User } from "next-auth";
+import { getUserByCredentials } from "@/lib/getUserByCredentials";
 
 export const config = {
   adapter: PrismaAdapter(prisma),
   providers: [
+    Credentials({
+      credentials: {
+        email: { label: "Email", type: "email", placeholder: "Email" },
+        password: {
+          label: "Email",
+          type: "password",
+          placeholder: "Mot de passe",
+        },
+      },
+      async authorize(credentials) {
+        const { email, password } = credentials;
+        if (typeof email !== "string" || typeof password !== "string")
+          return null;
+
+        const user = await getUserByCredentials(email, password);
+        if (!user) return null;
+        return user;
+      },
+    }),
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
@@ -20,6 +41,9 @@ export const config = {
   },
   session: {
     strategy: "database" as const,
+  },
+  pages: {
+    signIn: "/signIn",
   },
   events: {
     async signIn() {
