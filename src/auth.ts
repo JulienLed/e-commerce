@@ -5,6 +5,8 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import type { Session, User } from "next-auth";
 import { getUserByCredentials } from "@/lib/getUserByCredentials";
+import { signInSchema } from "@/lib/schema";
+import bcrypt from "bcrypt";
 
 export const config = {
   adapter: PrismaAdapter(prisma),
@@ -19,11 +21,11 @@ export const config = {
         },
       },
       async authorize(credentials) {
-        const { email, password } = credentials;
-        if (typeof email !== "string" || typeof password !== "string")
-          return null;
-
-        const user = await getUserByCredentials(email, password);
+        const result = signInSchema.safeParse(credentials);
+        if (result.error) return null;
+        const { email, password } = result.data;
+        const hashPassword = await bcrypt.hash(password, 15);
+        const user = await getUserByCredentials(email, hashPassword);
         if (!user) return null;
         return user;
       },

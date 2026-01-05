@@ -12,11 +12,17 @@ type FormData = {
 };
 
 export default function SignInForm() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    password: "",
+  });
   const [isPending, startTransition] = useTransition();
   const handleOnSubmit = () => {
     startTransition(async () => {
-      //créer et ajouter la serveur action qui valide les champs et créer l'user.
+      const response = await signIn("credentials", {
+        email: formData.email,
+        password: formData.password,
+      });
     });
   };
   return (
@@ -41,7 +47,9 @@ export default function SignInForm() {
               }
             />
           </section>
-          <Button type="submit"></Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Connection..." : "Se connecter"}
+          </Button>
         </form>
       </section>
       <section id="google">

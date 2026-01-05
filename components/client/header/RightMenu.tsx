@@ -33,7 +33,9 @@ export default function RightMenu({
         </div>
       ) : (
         <div className="flex justify-center p-2">
-          <Button onClick={() => signIn()}>Se connecter</Button>
+          <Button>
+            <Link href={"/signIn"}>Se connecter</Link>
+          </Button>
         </div>
       )}
       <div className="grid grid-cols-[70%_20%] p-2">

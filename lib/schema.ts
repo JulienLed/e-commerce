@@ -24,6 +24,11 @@ export const addressSchema = z.object({
   email: z.string().email(),
 });
 
+export const signInSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(5, "Minimum 5 charactères"),
+});
+
 export type FormData = z.infer<typeof addressSchema>;
 
 export type FormDataCreateProduct = {
