@@ -22,7 +22,7 @@ export default function RootLayout({
 
         <main className="w-[90vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col items-center gap-5">
           {children}
-          <Toaster />
+          <Toaster position="top-center" duration={3000} />
         </main>
 
         <footer></footer>
