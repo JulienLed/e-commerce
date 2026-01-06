@@ -1,6 +1,5 @@
 import { ShowProduct } from "@/components/server/ShowProduct";
 import { getProductsByCategory } from "../_action/productActions";
-import { Suspense } from "react";
 import { notFound } from "next/navigation";
 
 export default async function Page({

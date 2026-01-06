@@ -45,6 +45,11 @@ export default function MiddelMenu({
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild>
+            <Link href={"/profile"}>Profile</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
         {userRole === "ADMIN" && (
           <NavigationMenuItem>
             <NavigationMenuLink asChild>

@@ -79,3 +79,17 @@ export type OrderWithUserInfos = {
   status: OrderStatus;
   stripePaymentIntentId: string | null;
 };
+
+export type SignFormData = {
+  email: string;
+  password: string;
+};
+
+export type ProfilFormData = {
+  name: string;
+  email: string;
+  newPassword: string;
+  newPasswordConfirm: string;
+  imgURL: string;
+  role: string;
+};

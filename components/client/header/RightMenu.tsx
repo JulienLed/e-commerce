@@ -1,11 +1,12 @@
 "use client";
 
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { Button } from "../../ui/button";
 import Image from "next/image";
 import { CartDialog } from "@/components/client/header/CartDialog";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function RightMenu({
   cart,
@@ -15,21 +16,31 @@ export default function RightMenu({
   products: number;
 }) {
   const { data, status } = useSession();
+  const router = useRouter();
 
   return (
     <div>
       {status === "authenticated" ? (
         <div className="flex flex-col gap-2 p-2">
           <div className="flex items-center">
-            <Image
-              alt="user-img"
-              src={data.user?.image || ""}
-              width={30}
-              height={30}
-            />
+            {data.user?.image && (
+              <Image
+                alt="user-img"
+                src={data.user?.image}
+                width={30}
+                height={30}
+              />
+            )}
             <p>{data.user?.name}</p>
           </div>
-          <Button onClick={() => signOut()}>Se déconnecter</Button>
+          <Button
+            onClick={() => {
+              signOut();
+              router.push("/");
+            }}
+          >
+            Se déconnecter
+          </Button>
         </div>
       ) : (
         <div className="flex justify-center p-2">

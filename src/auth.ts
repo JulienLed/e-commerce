@@ -6,7 +6,6 @@ import { prisma } from "@/lib/prisma";
 import type { Session, User } from "next-auth";
 import { getUserByCredentials } from "@/lib/getUserByCredentials";
 import { signInSchema } from "@/lib/schema";
-import bcrypt from "bcrypt";
 
 export const config = {
   adapter: PrismaAdapter(prisma),
@@ -24,8 +23,7 @@ export const config = {
         const result = signInSchema.safeParse(credentials);
         if (result.error) return null;
         const { email, password } = result.data;
-        const hashPassword = await bcrypt.hash(password, 15);
-        const user = await getUserByCredentials(email, hashPassword);
+        const user = await getUserByCredentials(email, password);
         if (!user) return null;
         return user;
       },
@@ -36,13 +34,26 @@ export const config = {
     }),
   ],
   callbacks: {
-    session({ session, user }: { session: Session; user: User }) {
-      session.user!.id = user.id;
+    // session({ session, user }: { session: Session; user: User }) {
+    //   session.user!.id = user.id;
+    //   return session;
+    // },
+
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+      }
       return session;
     },
   },
   session: {
-    strategy: "database" as const,
+    strategy: "jwt" as const,
   },
   pages: {
     signIn: "/signIn",

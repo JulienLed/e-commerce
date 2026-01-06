@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import SignInForm from "@/components/client/signIn/SignInForm";
+import SignForm from "@/components/client/signForm/SignForm";
 
 export default function Page() {
   return (
@@ -8,7 +8,7 @@ export default function Page() {
         <CardTitle>Se connecter</CardTitle>
       </CardHeader>
       <CardContent>
-        <SignInForm />
+        <SignForm mode={"signIn"} />
       </CardContent>
     </Card>
   );
