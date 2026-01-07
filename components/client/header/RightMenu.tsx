@@ -7,31 +7,35 @@ import Image from "next/image";
 import { CartDialog } from "@/components/client/header/CartDialog";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { User } from "@prisma/client";
 
 export default function RightMenu({
   cart,
   products,
+  user,
 }: {
   cart: React.ReactNode;
   products: number;
+  user: User | null;
 }) {
-  const { data, status } = useSession();
   const router = useRouter();
 
   return (
     <div>
       {status === "authenticated" ? (
         <div className="flex flex-col gap-2 p-2">
-          <div className="flex items-center">
-            {data.user?.image && (
+          <div className="flex justify-evenly items-center">
+            {user?.image && (
               <Image
                 alt="user-img"
-                src={data.user?.image}
+                src={user?.image}
                 width={30}
                 height={30}
+                className="rounded-md"
               />
             )}
-            <p>{data.user?.name}</p>
+            <p>{user?.name}</p>
+            <p>{user?.surname}</p>
           </div>
           <Button
             onClick={() => {

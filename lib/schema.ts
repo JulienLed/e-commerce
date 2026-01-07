@@ -29,6 +29,17 @@ export const signInSchema = z.object({
   password: z.string().min(5, "Minimum 5 charactères"),
 });
 
+export const profilFormSchema = z.object({
+  name: z.string().min(3, "Minimum 3 charactères").optional(),
+  surname: z.string().min(3, "Minimum 3 charactères").optional(),
+  email: z.string().email().optional(),
+  newPassword: z.string().min(3, "Minimum 3 charactères").optional(),
+  newPasswordConfirm: z.string().min(3, "Minimum 3 charactères").optional(),
+  address: z.string().min(3, "Minimum 3 charactères").optional(),
+  imgURL: z.string().url().optional(),
+  role: z.string(),
+});
+
 export type FormData = z.infer<typeof addressSchema>;
 
 export type FormDataCreateProduct = {
@@ -85,11 +96,4 @@ export type SignFormData = {
   password: string;
 };
 
-export type ProfilFormData = {
-  name: string;
-  email: string;
-  newPassword: string;
-  newPasswordConfirm: string;
-  imgURL: string;
-  role: string;
-};
+export type ProfilFormData = z.infer<typeof profilFormSchema>;

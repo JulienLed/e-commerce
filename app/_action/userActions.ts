@@ -3,7 +3,12 @@
 import { auth } from "@/src/auth";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
-import { SignFormData, signInSchema } from "@/lib/schema";
+import {
+  ProfilFormData,
+  profilFormSchema,
+  SignFormData,
+  signInSchema,
+} from "@/lib/schema";
 import bcrypt from "bcrypt";
 
 //Get User ID
@@ -62,4 +67,62 @@ export const signUp = async (formData: SignFormData) => {
     },
   });
   return newUser;
+};
+
+//Update user infos
+export const updateUserInfo = async (formData: ProfilFormData) => {
+  const response = profilFormSchema.safeParse(formData);
+  if (response.error)
+    return { success: false, data: "Erreur dans le formulaire" };
+  const {
+    name,
+    surname,
+    address,
+    email,
+    newPassword,
+    newPasswordConfirm,
+    imgURL,
+  } = response.data;
+  const user = await getUserInfos();
+  if (newPassword !== newPasswordConfirm)
+    return { success: false, data: "Veuillez indiquer les même mot de passe" };
+  if (
+    imgURL &&
+    !imgURL.includes("images.pexels.com") &&
+    !imgURL.includes("lh3.googleusercontent.com")
+  )
+    return {
+      success: false,
+      data: "Veuillez choisir une image provenant de images.pexels.com",
+    };
+  if (user?.password && newPassword) {
+    const isSamePwd = await bcrypt.compare(newPassword, user?.password);
+    if (isSamePwd)
+      return {
+        success: false,
+        data: "Veuillez choisir un mot de passe différent",
+      };
+  }
+  const hashNewPassword = newPassword
+    ? await bcrypt.hash(newPassword, 15)
+    : null;
+  const updatedUser = await prisma.user.update({
+    where: {
+      email,
+    },
+    data: {
+      name,
+      surname,
+      address,
+      email,
+      password: hashNewPassword,
+      image: imgURL,
+    },
+  });
+  if (!updatedUser)
+    return {
+      success: false,
+      data: "Problème lors de la mise à jour des infos",
+    };
+  return { success: true, data: "Informations de profil bien mises à jour" };
 };

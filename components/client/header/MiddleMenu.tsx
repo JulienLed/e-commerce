@@ -8,14 +8,14 @@ import {
   NavigationMenuContent,
   NavigationMenu,
 } from "@/components/ui/navigation-menu";
-import { Category } from "@prisma/client";
+import { Category, User } from "@prisma/client";
 import Link from "next/link";
 
 export default function MiddelMenu({
-  userRole,
+  user,
   categories,
 }: {
-  userRole: string;
+  user: User | null;
   categories: Category[];
 }) {
   return (
@@ -45,12 +45,14 @@ export default function MiddelMenu({
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href={"/profile"}>Profile</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        {userRole === "ADMIN" && (
+        {user && (
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link href={"/profile"}>Profile</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        )}
+        {user?.role === "ADMIN" && (
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
               <Link href={"/admin"}>Admin</Link>

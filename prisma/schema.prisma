@@ -133,8 +133,10 @@ model Session {
 model User {
   id            String    @id @default(cuid())
   name          String?
+  surname       String?   @default("")
   email         String?   @unique
   emailVerified DateTime?
+  address       String?
   image         String?
   role          UserRole  @default(USER)
   password      String?

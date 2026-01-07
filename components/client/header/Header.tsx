@@ -12,7 +12,6 @@ export default async function Header() {
   const products = await numOfproducts();
   const user = await getUserInfos();
   const categories = await getAllCategories();
-  const userRole = user?.role;
 
   return (
     <div className="grid grid-cols-[10%_auto_20%_10%] items-center py-2">
@@ -20,7 +19,7 @@ export default async function Header() {
         <Image alt="logo" src={"/globe.svg"} width={50} height={50} />
       </section>
       <section id="menu" className="m-auto">
-        <MiddelMenu userRole={userRole || "USER"} categories={categories} />
+        <MiddelMenu user={user} categories={categories} />
       </section>
       <section id="search">
         <Search />
@@ -30,7 +29,7 @@ export default async function Header() {
         className="flex flex-col items-center border-l-2"
       >
         <SessionProvider>
-          <RightMenu cart={<Cart />} products={products} />
+          <RightMenu cart={<Cart />} products={products} user={user} />
         </SessionProvider>
       </section>
     </div>

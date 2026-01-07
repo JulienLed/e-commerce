@@ -3,7 +3,6 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
-import type { Session, User } from "next-auth";
 import { getUserByCredentials } from "@/lib/getUserByCredentials";
 import { signInSchema } from "@/lib/schema";
 
@@ -34,18 +33,13 @@ export const config = {
     }),
   ],
   callbacks: {
-    // session({ session, user }: { session: Session; user: User }) {
-    //   session.user!.id = user.id;
-    //   return session;
-    // },
-
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
         token.id = user.id;
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: any }) {
       if (session.user) {
         session.user.id = token.id as string;
       }
