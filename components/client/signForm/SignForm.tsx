@@ -64,6 +64,12 @@ export default function SignForm({ mode }: { mode: SignFormProps }) {
       }
     });
   };
+
+  const handleOnClick = () => {
+    startTransition(async () => {
+      //const response = await forgotPassword() et un comportement pour envoyer un mail, etc...
+    });
+  };
   return (
     <div className="flex flex-col items-center gap-2">
       <section id="credentials" className="flex flex-col items-center">
@@ -117,9 +123,12 @@ export default function SignForm({ mode }: { mode: SignFormProps }) {
           </Button>
         </form>
         {mode === "signIn" && (
-          <Link href={"/signUp"}>
-            <span className="text-sm">Pas de compte ?</span>
-          </Link>
+          <div className="flex ">
+            <Link href={"/signUp"}>
+              <span className="text-sm">Pas de compte ?</span>
+            </Link>
+            <span onClick={() => handleOnClick()}>Mot de passe oublié ?</span>
+          </div>
         )}
       </section>
       <section id="divider" className="w-full border-t-2"></section>

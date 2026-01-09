@@ -72,8 +72,20 @@ export const signUp = async (formData: SignFormData) => {
 //Update user infos
 export const updateUserInfo = async (formData: ProfilFormData) => {
   const response = profilFormSchema.safeParse(formData);
-  if (response.error)
-    return { success: false, data: "Erreur dans le formulaire" };
+  if (response.error) {
+    const errorsFlat = response.error.flatten();
+    const errors: Record<string, string> = {};
+    for (const [field, messages] of Object.entries(errorsFlat.fieldErrors)) {
+      if (messages && messages.length > 0) {
+        errors[field] = messages[0];
+      }
+    }
+    return {
+      success: false,
+      data: "Erreur dans le formulaire",
+      errors: errors,
+    };
+  }
   const {
     name,
     surname,

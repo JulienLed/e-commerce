@@ -22,7 +22,7 @@ export default function RightMenu({
 
   return (
     <div>
-      {status === "authenticated" ? (
+      {user ? (
         <div className="flex flex-col gap-2 p-2">
           <div className="flex justify-evenly items-center">
             {user?.image && (

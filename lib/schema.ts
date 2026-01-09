@@ -33,11 +33,19 @@ export const profilFormSchema = z.object({
   name: z.string().min(3, "Minimum 3 charactères").optional(),
   surname: z.string().min(3, "Minimum 3 charactères").optional(),
   email: z.string().email().optional(),
-  newPassword: z.string().min(3, "Minimum 3 charactères").optional(),
-  newPasswordConfirm: z.string().min(3, "Minimum 3 charactères").optional(),
+  newPassword: z
+    .string()
+    .min(3, "Minimum 3 charactères")
+    .or(z.literal(""))
+    .optional(),
+  newPasswordConfirm: z
+    .string()
+    .min(3, "Minimum 3 charactères")
+    .or(z.literal(""))
+    .optional(),
   address: z.string().min(3, "Minimum 3 charactères").optional(),
-  imgURL: z.string().url().optional(),
-  role: z.string(),
+  imgURL: z.string().url().optional().or(z.literal("")),
+  role: z.string().optional(),
 });
 
 export type FormData = z.infer<typeof addressSchema>;
