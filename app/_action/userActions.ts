@@ -11,6 +11,9 @@ import {
 } from "@/lib/schema";
 import bcrypt from "bcrypt";
 
+//Bcrypt salt
+const salt = 15;
+
 //Get User ID
 export const getUserId = async () => {
   const session = await auth();
@@ -50,7 +53,7 @@ export const signUp = async (formData: SignFormData) => {
   const response = signInSchema.safeParse(formData);
   if (response.error) return null;
   const { email, password } = response.data;
-  const hashPasword = await bcrypt.hash(password, 15);
+  const hashPasword = await bcrypt.hash(password, salt);
   const userIfExist = await prisma.user.findUnique({
     where: {
       email,
@@ -116,7 +119,7 @@ export const updateUserInfo = async (formData: ProfilFormData) => {
       };
   }
   const hashNewPassword = newPassword
-    ? await bcrypt.hash(newPassword, 15)
+    ? await bcrypt.hash(newPassword, salt)
     : null;
   const updatedUser = await prisma.user.update({
     where: {
@@ -137,4 +140,38 @@ export const updateUserInfo = async (formData: ProfilFormData) => {
       data: "Problème lors de la mise à jour des infos",
     };
   return { success: true, data: "Informations de profil bien mises à jour" };
+};
+
+//Reset Password
+export const resetPassword = async (token: string, newPassword: string) => {
+  const dbToken = await prisma.passwordResetToken.findUnique({
+    where: {
+      token,
+    },
+  });
+  if (!dbToken) return { success: false, message: "Mauvais Token" };
+  const now = new Date(Date.now());
+  const isValidToken =
+    now.getTime() - dbToken.expires.getTime() < 15 * 60 * 1000;
+  if (!isValidToken) return { success: false, message: "Token expiré" };
+  const hashPassword = await bcrypt.hash(newPassword, salt);
+  const userUpdated = await prisma.user.update({
+    where: {
+      id: dbToken.userId,
+    },
+    data: {
+      password: hashPassword,
+    },
+  });
+  if (!userUpdated)
+    return {
+      success: false,
+      message: "Problème lors de la réinitialisation du mot de passe",
+    };
+  await prisma.passwordResetToken.delete({
+    where: {
+      token: dbToken.token,
+    },
+  });
+  return { success: true, message: "Mot de passe bien réinitialisé" };
 };

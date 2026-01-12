@@ -11,10 +11,17 @@ import { toast } from "sonner";
 import { GoogleLogo } from "./GoogleLogo";
 import { SignFormData } from "@/lib/schema";
 import { signUp } from "@/app/_action/userActions";
+import ForgotPasswordDialog from "./ForgotPasswordDialog";
 
 type SignFormProps = "signIn" | "signUp";
 
-export default function SignForm({ mode }: { mode: SignFormProps }) {
+export default function SignForm({
+  mode,
+  token,
+}: {
+  mode: SignFormProps;
+  token: string;
+}) {
   const [formData, setFormData] = useState<SignFormData>({
     email: "",
     password: "",
@@ -62,12 +69,6 @@ export default function SignForm({ mode }: { mode: SignFormProps }) {
           setIsError(true);
         }
       }
-    });
-  };
-
-  const handleOnClick = () => {
-    startTransition(async () => {
-      //const response = await forgotPassword() et un comportement pour envoyer un mail, etc...
     });
   };
   return (
@@ -123,11 +124,11 @@ export default function SignForm({ mode }: { mode: SignFormProps }) {
           </Button>
         </form>
         {mode === "signIn" && (
-          <div className="flex ">
+          <div className="relative flex">
             <Link href={"/signUp"}>
               <span className="text-sm">Pas de compte ?</span>
             </Link>
-            <span onClick={() => handleOnClick()}>Mot de passe oublié ?</span>
+            <ForgotPasswordDialog token={token} />
           </div>
         )}
       </section>
