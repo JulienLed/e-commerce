@@ -10,29 +10,21 @@ import { FormData } from "@/lib/schema";
 import { createOrder } from "@/app/_action/orderActions";
 import { createStripeSession } from "@/app/_action/stripeActions";
 import { toast } from "sonner";
+import { User } from "@prisma/client";
 
-type UserInfosProps =
-  | {
-      id: string;
-      email: string | null;
-      name: string | null;
-      emailVerified: Date | null;
-      image: string | null;
-    }
-  | null
-  | undefined;
-
-export default function Adress({ userInfos }: { userInfos: UserInfosProps }) {
+export default function Adress({ userInfos }: { userInfos: User }) {
   const [isPending, startTransition] = useTransition();
-  const userName = userInfos?.name?.split(" ")[0];
-  const userSurname = userInfos?.name?.split(" ")[1];
+  const street = userInfos.address?.split(" ", 4);
+  const numStreet = userInfos.address?.split(" ")[3];
+  const postalCode = userInfos.address?.split(" ")[2];
+  const city = userInfos.address?.split(" ")[3];
   const [formData, setFormData] = useState<FormData>({
-    name: userName ? userName : "",
-    surname: userSurname ? userSurname : "",
-    street: "",
-    numStreet: "",
-    postalCode: "",
-    city: "",
+    name: userInfos.name ? userInfos.name : "",
+    surname: userInfos.surname ? userInfos.surname : "",
+    street: street ? street : "",
+    numStreet: numStreet ? numStreet : "",
+    postalCode: postalCode ? postalCode : "",
+    city: city ? city : "",
     email: userInfos?.email ? userInfos.email : "",
   });
 
