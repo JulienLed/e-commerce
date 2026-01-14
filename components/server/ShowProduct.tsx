@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Card, CardContent, CardHeader } from "../ui/card";
-import { Prisma } from "@/generated/prisma/client";
+import { Prisma } from "@prisma/client";
 import HandleCart from "../client/cart/HandleCart";
 import Link from "next/link";
 
