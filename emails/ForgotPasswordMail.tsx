@@ -18,7 +18,10 @@ import {
 } from "@react-email/components";
 
 export default function ForgotPasswordMail(url: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3000";
+  const baseUrl =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : process.env.NEXT_PUBLIC_URL;
 
   return (
     <Html>

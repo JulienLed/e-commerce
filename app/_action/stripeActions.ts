@@ -17,6 +17,10 @@ export const createStripeSession = async (orderId: number) => {
         },
       },
     });
+    const domain =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000"
+        : process.env.NEXT_PUBLIC_URL;
     const stripeSession = await stripe.checkout.sessions.create({
       metadata: {
         orderId: orderId.toString(),
@@ -34,8 +38,8 @@ export const createStripeSession = async (orderId: number) => {
         quantity: item.quantity,
       })),
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_URL}/checkout/success?orderId=${orderId}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_URL}/checkout`,
+      success_url: `${domain}/checkout/success?orderId=${orderId}`,
+      cancel_url: `${domain}/checkout`,
       customer_email: order?.shippingEmail,
     });
     return { success: true, sessionUrl: stripeSession.url };
