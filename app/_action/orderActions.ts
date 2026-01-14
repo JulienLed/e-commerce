@@ -5,7 +5,7 @@ import { getUserId } from "./userActions";
 import { getCartByUserId } from "./cartActions";
 import { addressSchema } from "@/lib/schema";
 import { FormData } from "@/lib/schema";
-import { Prisma } from "@/generated/prisma/client";
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { OrderStatus } from "@prisma/client";
 
