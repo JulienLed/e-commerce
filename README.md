@@ -51,7 +51,8 @@ npx prisma db push
 
 # Développement
 npm run dev
-🔧 Variables d'environnement
+
+🔧 Variables environnement
 # Database
 DATABASE_URL="postgresql://..."
 DIRECT_URL="postgresql://..."
@@ -71,8 +72,10 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_..."
 
 # Resend
 RESEND_API_KEY="re_..."
+
 🧪 Développement avec Stripe
 stripe listen --forward-to localhost:3000/api/webhooks/stripe
+
 🌐 Demo
 Déploiement à venir sur VPS privé
 📝 Développé par
