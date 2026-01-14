@@ -12,11 +12,11 @@ import { createStripeSession } from "@/app/_action/stripeActions";
 import { toast } from "sonner";
 import { User } from "@prisma/client";
 
-export default function Adress({ userInfos }: { userInfos: User }) {
+export default function Adress({ userInfos }: { userInfos: User | null }) {
   const [isPending, startTransition] = useTransition();
   const [formData, setFormData] = useState<FormData>({
-    name: userInfos.name ? userInfos.name : "",
-    surname: userInfos.surname ? userInfos.surname : "",
+    name: userInfos?.name ? userInfos.name : "",
+    surname: userInfos?.surname ? userInfos.surname : "",
     street: "",
     numStreet: "",
     postalCode: "",

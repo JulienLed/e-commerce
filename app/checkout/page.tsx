@@ -1,7 +1,7 @@
-import Adress from "@/components/client/checkout/Adress";
+import Address from "@/components/client/checkout/Address";
 import { getUserInfos } from "../_action/userActions";
 
 export default async function Page() {
   const userInfos = await getUserInfos();
-  return <Adress userInfos={userInfos} />;
+  return <Address userInfos={userInfos} />;
 }
