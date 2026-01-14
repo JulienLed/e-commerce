@@ -5,6 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import { getUserByCredentials } from "@/lib/getUserByCredentials";
 import { signInSchema } from "@/lib/schema";
+import { checkRateLimit } from "@/app/_action/ipActions";
 
 export const config = {
   adapter: PrismaAdapter(prisma),
@@ -19,6 +20,7 @@ export const config = {
         },
       },
       async authorize(credentials) {
+        await checkRateLimit();
         const result = signInSchema.safeParse(credentials);
         if (result.error) return null;
         const { email, password } = result.data;

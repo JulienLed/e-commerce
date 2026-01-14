@@ -10,6 +10,7 @@ import {
   signInSchema,
 } from "@/lib/schema";
 import bcrypt from "bcrypt";
+import { checkRateLimit } from "./ipActions";
 
 //Bcrypt salt
 const salt = 15;
@@ -50,6 +51,7 @@ export const getUsersCount = async () => {
 
 //Sign Up new user by credentials
 export const signUp = async (formData: SignFormData) => {
+  await checkRateLimit();
   const response = signInSchema.safeParse(formData);
   if (response.error) return null;
   const { email, password } = response.data;
@@ -144,6 +146,7 @@ export const updateUserInfo = async (formData: ProfilFormData) => {
 
 //Reset Password
 export const resetPassword = async (token: string, newPassword: string) => {
+  await checkRateLimit();
   const dbToken = await prisma.passwordResetToken.findUnique({
     where: {
       token,

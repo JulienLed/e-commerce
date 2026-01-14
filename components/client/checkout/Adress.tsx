@@ -14,17 +14,13 @@ import { User } from "@prisma/client";
 
 export default function Adress({ userInfos }: { userInfos: User }) {
   const [isPending, startTransition] = useTransition();
-  const street = userInfos.address?.split(" ", 4);
-  const numStreet = userInfos.address?.split(" ")[3];
-  const postalCode = userInfos.address?.split(" ")[2];
-  const city = userInfos.address?.split(" ")[3];
   const [formData, setFormData] = useState<FormData>({
     name: userInfos.name ? userInfos.name : "",
     surname: userInfos.surname ? userInfos.surname : "",
-    street: street ? street : "",
-    numStreet: numStreet ? numStreet : "",
-    postalCode: postalCode ? postalCode : "",
-    city: city ? city : "",
+    street: "",
+    numStreet: "",
+    postalCode: "",
+    city: "",
     email: userInfos?.email ? userInfos.email : "",
   });
 
