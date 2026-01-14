@@ -68,7 +68,9 @@ export const resendForgotPassword = async (email: string, token: string) => {
         expires: expireDate,
       },
     });
-    const domain = process.env.NODE_ENV === "development" ? "http://localhost:3000" : process.env.NEXT_PUBLIC_URL
+    const domain = process.env.NEXT_PUBLIC_URL
+      ? process.env.NEXT_PUBLIC_URL
+      : "http://localhost:3000";
     const url = `${domain}/resetPassword/${token}`;
     const { data, error } = await resend.emails.send({
       from: "Smoke <onboarding@resend.dev>",

@@ -1,5 +1,4 @@
 // emails/OrderConfirmation.tsx
-import { OrderWithUserInfos } from "@/lib/schema";
 import {
   Body,
   Container,
