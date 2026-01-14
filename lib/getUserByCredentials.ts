@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { prisma } from "./prisma";
 
 export const getUserByCredentials = async (email: string, password: string) => {

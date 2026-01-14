@@ -9,7 +9,7 @@ import {
   SignFormData,
   signInSchema,
 } from "@/lib/schema";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { checkRateLimit } from "./ipActions";
 
 //Bcrypt salt
