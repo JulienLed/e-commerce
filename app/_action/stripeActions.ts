@@ -17,7 +17,7 @@ export const createStripeSession = async (orderId: number) => {
         },
       },
     });
-    console.log("Le Order : " + order);
+    console.log("Le Order : " + JSON.stringify(order));
     const domain =
       process.env.NODE_ENV === "production"
         ? process.env.NEXT_PUBLIC_URL
