@@ -1,68 +1,83 @@
-# E-Commerce Platform
+# Smoke - Plateforme E-Commerce
 
-Une plateforme e-commerce complète développée avec Next.js, incluant un système de panier avancé, gestion de stock, et paiements sécurisés.
+Plateforme e-commerce complète développée avec Next.js 14, intégrant authentification multi-provider, paiements Stripe, et dashboard administrateur avancé.
 
 ## 🚀 Fonctionnalités
 
-- Catalogue produits avec filtrage et recherche
-- Système de panier avec gestion des quantités
-- Authentification utilisateur (inscription/connexion)
-- Gestion de stock en temps réel
-- Processus de paiement sécurisé
-- Interface d'administration (gestion produits, commandes)
+**Côté Client :**
+- Catalogue produits avec recherche en temps réel et filtrage par catégorie
+- Système de panier persistant (utilisateurs connectés et invités)
+- Paiement sécurisé via Stripe avec confirmation email automatique
+- Autocomplétion d'adresse (Google Places API)
+- Gestion de profil et réinitialisation de mot de passe sécurisée
 - Design responsive
+
+**Authentification :**
+- Multi-provider : Google OAuth + Email/Mot de passe
+- Système de rôles (User/Admin) avec protection des routes
+- Rate limiting (3 tentatives/15 min)
+- Sessions JWT avec Auth.js
+
+**Dashboard Admin :**
+- CRUD complet (produits, catégories, commandes)
+- Statistiques en temps réel (CA, utilisateurs, commandes)
+- Gestion du stock et modification des statuts de commande
+- Système de tri et recherche avancée
 
 ## 🛠️ Stack Technique
 
-- **Frontend:** Next.js 14, React, TypeScript
-- **Styling:** Tailwind CSS
-- **Backend:** Next.js API Routes
-- **Database:** PostgreSQL
-- **ORM:** Prisma
-- **Authentification:** Auth.js (NextAuth)
-- **Déploiement:** Vercel/VPS
+- **Frontend:** Next.js 14, React 18, TypeScript, Tailwind CSS, shadcn/ui
+- **Backend:** Next.js API Routes, Server Actions
+- **Database:** PostgreSQL (VPS privé), Prisma 6
+- **Authentification:** Auth.js (NextAuth) avec JWT
+- **Paiements:** Stripe (webhooks)
+- **Emails:** Resend + React Email
+- **Sécurité:** bcrypt, Zod, rate limiting, CSRF protection
 
 ## 📦 Installation
-```bash
-# Cloner le repository
-git clone [repo-url]
 
-# Installer les dépendances
+```bash
+# Cloner et installer
+git clone [repo-url]
 npm install
 
-# Configurer les variables d'environnement
+# Configuration
 cp .env.example .env.local
 # Éditer .env.local
 
-# Lancer la base de données
-npx prisma migrate dev
+# Base de données
+npx prisma generate
+npx prisma db push
 
-# Lancer le serveur de développement
+# Développement
 npm run dev
-```
 
-L'application sera accessible sur `http://localhost:3000`
-
-## 🌐 Demo
-```
-A venir
-```
-
-## 📸 Captures d'écran
-
-```
-A venir
-```
-
-## 🔧 Configuration
-
-Créer un fichier `.env.local` avec :
-```
+🔧 Variables environnement
+# Database
 DATABASE_URL="postgresql://..."
-NEXTAUTH_SECRET="..."
-NEXTAUTH_URL="http://localhost:3000"
-```
+DIRECT_URL="postgresql://..."
 
-## 📝 Développé par
+# Auth.js
+AUTH_SECRET="..."
+AUTH_URL="http://localhost:3000"
 
-Julien Ledent - [lepoteauduweb.be](https://lepoteauduweb.be)
+# Google OAuth
+GOOGLE_CLIENT_ID="..."
+GOOGLE_CLIENT_SECRET="..."
+
+# Stripe
+STRIPE_SECRET_KEY="sk_test_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_..."
+
+# Resend
+RESEND_API_KEY="re_..."
+
+🧪 Développement avec Stripe
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+
+🌐 Demo
+Déploiement à venir sur VPS privé
+📝 Développé par
+Julien Ledent - Full-Stack Developer
+lepoteauduweb.be
