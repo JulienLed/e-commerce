@@ -115,7 +115,9 @@ export default function Adress({ userInfos }: { userInfos: User | null }) {
               </div>
             );
           })}
-          <Button type="submit">{isPending ? "Envoi..." : "Valider"}</Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Envoi..." : "Valider"}
+          </Button>
         </form>
       </CardContent>
     </Card>

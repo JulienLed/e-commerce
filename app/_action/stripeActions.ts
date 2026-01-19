@@ -44,6 +44,7 @@ export const createStripeSession = async (orderId: number) => {
     });
     return { success: true, sessionUrl: stripeSession.url };
   } catch (error) {
+    console.log(error);
     return { success: false, message: error };
   }
 };
