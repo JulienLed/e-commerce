@@ -17,6 +17,7 @@ export const createStripeSession = async (orderId: number) => {
         },
       },
     });
+    console.log("Le Order : " + order);
     const domain =
       process.env.NODE_ENV === "production"
         ? process.env.NEXT_PUBLIC_URL
@@ -42,6 +43,7 @@ export const createStripeSession = async (orderId: number) => {
       cancel_url: `${domain}/checkout`,
       customer_email: order?.shippingEmail,
     });
+    console.log("SessionURL : " + stripeSession.url);
     return { success: true, sessionUrl: stripeSession.url };
   } catch (error) {
     console.log(error);
