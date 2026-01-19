@@ -23,16 +23,20 @@ export default function MiddelMenu({
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
-            <Link href={"/"}>Home</Link>
+            <Link className="text-2xl! font-semibold!" href={"/"}>
+              Accueil
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+          <NavigationMenuTrigger className="text-2xl! font-semibold! hover:bg-accent! py-6!">
+            Produits
+          </NavigationMenuTrigger>
           <NavigationMenuContent className="min-w-37.5">
             <ul>
               {categories.map((category) => {
                 return (
-                  <li key={category.id}>
+                  <li key={category.id} className="text-2xl! font-semibold!">
                     <NavigationMenuLink asChild>
                       <Link href={`/${category.name}`}>
                         {category.name.charAt(0).toUpperCase() +
@@ -48,14 +52,18 @@ export default function MiddelMenu({
         {user && (
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href={"/profile"}>Profile</Link>
+              <Link className="text-2xl! font-semibold!" href={"/profile"}>
+                Profile
+              </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
         )}
         {user?.role === "ADMIN" && (
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href={"/admin"}>Admin</Link>
+              <Link className="text-2xl! font-semibold!" href={"/admin"}>
+                Admin
+              </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
         )}

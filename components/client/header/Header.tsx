@@ -14,7 +14,7 @@ export default async function Header() {
   const categories = await getAllCategories();
 
   return (
-    <div className="grid grid-cols-[10%_auto_20%_10%] items-center py-2">
+    <div className="grid grid-cols-[10%_auto_20%_10%] items-center py-2 bg-fuchsia-200/80">
       <section id="logo" className="justify-self-center">
         <Image alt="logo" src={"/globe.svg"} width={50} height={50} />
       </section>
