@@ -72,7 +72,6 @@ export async function POST(req: NextRequest) {
     }
     return new NextResponse("OK", { status: 200 });
   } catch (error) {
-    console.log("L'erreru du catch : " + error);
     return new NextResponse("Webhook, handler failed", { status: 500 });
   }
 }
