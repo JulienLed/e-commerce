@@ -17,9 +17,10 @@ export const createStripeSession = async (orderId: number) => {
         },
       },
     });
-    const domain = process.env.NEXT_PUBLIC_URL
-      ? process.env.NEXT_PUBLIC_URL
-      : "http://localhost:3000";
+    const domain =
+      process.env.NODE_ENV === "production"
+        ? process.env.NEXT_PUBLIC_URL
+        : "http://localhost:3000";
     const stripeSession = await stripe.checkout.sessions.create({
       metadata: {
         orderId: orderId.toString(),

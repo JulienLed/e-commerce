@@ -35,7 +35,7 @@ export default function ResetPassword({ token }: { token: string }) {
             onChange={(e) => setNewPassword(e.target.value)}
             disabled={isPending}
           />
-          <Button onClick={() => handleOnClick()}>
+          <Button onClick={() => handleOnClick()} disabled={isPending}>
             {isPending ? "Validation..." : "Valider"}
           </Button>
         </div>
