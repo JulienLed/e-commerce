@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export const CartDialog = ({
   cart,
@@ -21,7 +22,12 @@ export const CartDialog = ({
       <DialogTrigger>
         <div className="relative">
           <ShoppingCart />
-          <Badge className="absolute top-0 left-5 h-4 w-2 text-[0.7rem]">
+          <Badge
+            className={cn(
+              "absolute top-0 left-5 h-4 w-2 text-[0.7rem]",
+              Number(products) > 0 && "bg-green-500 animate-pulse scale-105",
+            )}
+          >
             {Number(products) < 9 ? Number(products) : "9+"}
           </Badge>
         </div>

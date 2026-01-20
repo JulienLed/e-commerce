@@ -24,7 +24,7 @@ export default function RightMenu({
     <div>
       {user ? (
         <div className="flex flex-col gap-2 p-2">
-          <div className="flex justify-evenly items-center">
+          <div className="flex justify-evenly gap-2 items-center">
             {user?.image && (
               <Image
                 alt="user-img"
@@ -34,8 +34,10 @@ export default function RightMenu({
                 className="rounded-md"
               />
             )}
-            <p>{user?.name}</p>
-            <p>{user?.surname}</p>
+            <p className="text-lg text-fuchsia-950 font-bold">{user?.name}</p>
+            <p className="text-lg text-fuchsia-950 font-bold">
+              {user?.surname}
+            </p>
           </div>
           <Button
             onClick={() => {

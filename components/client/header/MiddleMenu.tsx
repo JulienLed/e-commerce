@@ -1,12 +1,19 @@
 "use client";
 
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
   NavigationMenuContent,
   NavigationMenu,
+  NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { Category, User } from "@prisma/client";
 import Link from "next/link";
@@ -19,7 +26,7 @@ export default function MiddelMenu({
   categories: Category[];
 }) {
   return (
-    <NavigationMenu>
+    <NavigationMenu viewport={false}>
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
@@ -32,7 +39,7 @@ export default function MiddelMenu({
           <NavigationMenuTrigger className="text-2xl! font-semibold! hover:bg-accent! py-6!">
             Produits
           </NavigationMenuTrigger>
-          <NavigationMenuContent className="min-w-37.5">
+          <NavigationMenuContent className="w-full!">
             <ul>
               {categories.map((category) => {
                 return (

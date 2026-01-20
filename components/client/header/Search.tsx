@@ -33,7 +33,7 @@ export default function Search() {
         placeholder="Rechercher..."
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
-        disabled={isPending}
+        className="text-xl!"
       />
       {searchInput && (
         <Card className="absolute w-full h-fit">
