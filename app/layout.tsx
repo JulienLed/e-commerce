@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Header from "@/components/client/header/Header";
+import Footer from "@/components/server/footer/Footer";
 import "./globals.css";
 import { Toaster } from "sonner";
 
@@ -25,7 +26,9 @@ export default function RootLayout({
           <Toaster position="top-center" duration={3000} />
         </main>
 
-        <footer></footer>
+        <footer>
+          <Footer />
+        </footer>
       </body>
     </html>
   );
