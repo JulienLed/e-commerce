@@ -2,6 +2,7 @@ import Image from "next/image";
 import { SessionProvider } from "next-auth/react";
 import RightMenu from "./RightMenu";
 import MiddelMenu from "./MiddleMenu";
+import MiddelMenuLittle from "./MiddelMenuLittle";
 import Search from "./Search";
 import { Cart } from "@/components/server/Cart";
 import { numOfproducts } from "@/app/_action/cartActions";
@@ -22,8 +23,8 @@ export default async function Header() {
         <section id="menu-desktop" className="hidden md:flex">
           <MiddelMenu user={user} categories={categories} />
         </section>
-        <section id="menu-smartphone" className="md:hidden flex">
-          <p>Menu Phone</p>
+        <section id="menu-smartphone" className="flex md:hidden">
+          <MiddelMenuLittle user={user} categories={categories} />
         </section>
       </section>
       <section id="search" className="justify-self-end">
