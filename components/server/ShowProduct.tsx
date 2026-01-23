@@ -19,7 +19,7 @@ export function ShowProduct({
     <div className="w-full">
       <Card>
         <CardHeader>{category}</CardHeader>
-        <CardContent className="grid grid-cols-5 gap-2">
+        <CardContent className="grid sm:grid-cols-3 lg:grid-cols-5 gap-2">
           {products.length === 0 || !products ? (
             <Card>
               <CardContent>Pas de produits dans cette catégorie</CardContent>

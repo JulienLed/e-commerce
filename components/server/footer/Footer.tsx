@@ -8,20 +8,31 @@ export default function Footer() {
     <div className="grid grid-cols-3 bg-fuchsia-200/80">
       <section
         id="about"
-        className="col-span-3 flex flex-col gap-2 items-center w-full"
+        className="col-span-3 flex flex-col gap-2 items-center w-full pb-5"
       >
         <Image alt="logo" src={"/logo.png"} width={50} height={50} />
         <span>{"Votre shop vape en ligne"}</span>
       </section>
       <section
         id="navigation"
-        className="justify-self-center flex flex-col gap-2"
+        className="justify-self-center flex flex-col gap-2 border-l-2 border-fuchsia-950 pl-2"
       >
-        <Link href={"/E-Cigarette"}>{"E-Cigarettes"}</Link>
-        <Link href={"/Coil"}>{"Résistances"}</Link>
-        <Link href={"/E-Liquid"}>{"E-Liquides"}</Link>
+        <h3 className="font-bold">Navigation</h3>
+        <Link href={"/E-Cigarette"} className="text-sm text-fuchsia-950">
+          {"E-Cigarettes"}
+        </Link>
+        <Link href={"/Coil"} className="text-sm text-fuchsia-950">
+          {"Résistances"}
+        </Link>
+        <Link href={"/E-Liquid"} className="text-sm text-fuchsia-950">
+          {"E-Liquides"}
+        </Link>
       </section>
-      <section id="contact" className="justify-self-center flex flex-col gap-2">
+      <section
+        id="contact"
+        className="justify-self-center flex flex-col gap-2 border-l-2 border-fuchsia-950 pl-2"
+      >
+        <h3 className="font-bold">Contact</h3>
         <a href="mailto:smoke@smoke.com" className="flex gap-2">
           <MailIcon />
           {"smoke@smoke.com"}
@@ -31,10 +42,26 @@ export default function Footer() {
           {"02/333.12.34"}
         </a>
       </section>
-      <section id="legal" className="justify-self-center flex flex-col gap-2">
-        <Link href={"/legals#mentions-legales"}>Mentions légales</Link>
-        <Link href={"/legals#cgv"}>Conditions générales de vente</Link>
-        <Link href={"/legals#confidentialite"}>Confidentialité</Link>
+      <section
+        id="legal"
+        className="justify-self-center flex flex-col gap-2 border-l-2 border-fuchsia-950 pl-2"
+      >
+        <h3 className="font-bold">Smoke</h3>
+        <Link
+          href={"/legals#mentions-legales"}
+          className="text-sm text-fuchsia-950"
+        >
+          Mentions légales
+        </Link>
+        <Link href={"/legals#cgv"} className="text-sm">
+          Conditions générales de vente
+        </Link>
+        <Link
+          href={"/legals#confidentialite"}
+          className="text-sm text-fuchsia-950"
+        >
+          Confidentialité
+        </Link>
       </section>
       <section
         id="signature"

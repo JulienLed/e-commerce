@@ -19,7 +19,12 @@ export default async function Header() {
         <Image alt="logo" src={"/logo.png"} width={100} height={100} />
       </section>
       <section id="menu" className="m-auto">
-        <MiddelMenu user={user} categories={categories} />
+        <section id="menu-desktop" className="hidden md:flex">
+          <MiddelMenu user={user} categories={categories} />
+        </section>
+        <section id="menu-smartphone" className="md:hidden flex">
+          <p>Menu Phone</p>
+        </section>
       </section>
       <section id="search" className="justify-self-end">
         <Search />

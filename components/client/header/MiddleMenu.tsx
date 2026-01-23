@@ -13,7 +13,6 @@ import {
   NavigationMenuTrigger,
   NavigationMenuContent,
   NavigationMenu,
-  NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { Category, User } from "@prisma/client";
 import Link from "next/link";
