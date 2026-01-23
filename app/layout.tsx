@@ -26,7 +26,7 @@ export default function RootLayout({
           <Toaster position="top-center" duration={3000} />
         </main>
 
-        <footer className="sticky bottom-0 z-88">
+        <footer className="relative z-88">
           <Footer />
         </footer>
       </body>
