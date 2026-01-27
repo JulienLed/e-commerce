@@ -19,7 +19,7 @@ export function ShowProduct({
     <div className="w-full">
       <Card>
         <CardHeader>{category}</CardHeader>
-        <CardContent className="grid sm:grid-cols-3 lg:grid-cols-5 gap-2">
+        <CardContent className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2">
           {products.length === 0 || !products ? (
             <Card>
               <CardContent>Pas de produits dans cette catégorie</CardContent>
@@ -29,10 +29,10 @@ export function ShowProduct({
               return (
                 <Card
                   key={product.id}
-                  className="min-w-10 max-w-50 flex flex-col"
+                  className="min-w-10 max-w-50 flex flex-col justify-self-center"
                 >
                   <CardContent className="flex-1 flex flex-col items-center gap-2 px-1">
-                    <h3>{product.name}</h3>
+                    <h3 className="text-sm md:text-base">{product.name}</h3>
                     <Link href={`/${category}/${product.id}`}>
                       <Image
                         alt={`Image of ${product.name}`}
@@ -43,7 +43,9 @@ export function ShowProduct({
                       />
                     </Link>
                     <p className="text-sm text-center">{product.description}</p>
-                    <p>{product.price / 100} €</p>
+                    <p className="text-sm md:text-base">
+                      {product.price / 100} €
+                    </p>
                   </CardContent>
                   <div className="p-4 pt-0">
                     <HandleCart productId={product.id} />

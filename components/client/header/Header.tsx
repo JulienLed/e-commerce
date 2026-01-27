@@ -15,19 +15,19 @@ export default async function Header() {
   const categories = await getAllCategories();
 
   return (
-    <div className="grid grid-cols-[auto_1fr_auto_auto] items-center py-2 bg-fuchsia-200/80">
+    <div className="relative grid grid-cols-[auto_1fr_auto_auto] items-center py-2 bg-fuchsia-200/80">
       <section id="logo" className="justify-self-start pl-2">
         <Image alt="logo" src={"/logo.png"} width={100} height={100} />
       </section>
-      <section id="menu" className="m-auto">
+      <section id="menu" className="m-auto col-span-2 md:col-span-1">
         <section id="menu-desktop" className="hidden md:flex">
           <MiddelMenu user={user} categories={categories} />
         </section>
-        <section id="menu-smartphone" className="flex md:hidden">
+        <section id="menu-smartphone" className="md:hidden">
           <MiddelMenuLittle user={user} categories={categories} />
         </section>
       </section>
-      <section id="search" className="justify-self-end">
+      <section id="search" className="hidden md:flex justify-self-end">
         <Search />
       </section>
       <section

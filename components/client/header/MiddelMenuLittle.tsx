@@ -1,10 +1,11 @@
+"use client";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -15,6 +16,7 @@ import {
 import { User, Category } from "@prisma/client";
 import { Menu } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function MiddelMenuLittle({
   user,
@@ -23,13 +25,11 @@ export default function MiddelMenuLittle({
   user: User | null;
   categories: Category[];
 }) {
+  const [open, setOpen] = useState(false);
   return (
-    //Problème d'affichage du Menu Icon.
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button>
-          <Menu />
-        </Button>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger>
+        <Menu />
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
@@ -39,10 +39,14 @@ export default function MiddelMenuLittle({
         <Accordion type="single" collapsible>
           <AccordionItem value="Produits">
             <AccordionTrigger>Produits</AccordionTrigger>
-            <AccordionContent>
+            <AccordionContent className="flex flex-col gap-2">
               {categories.map((category, id) => {
                 return (
-                  <Link key={id} href={`/${category.name}`}>
+                  <Link
+                    key={id}
+                    onClick={() => setOpen(false)}
+                    href={`/${category.name}`}
+                  >
                     {category.name.charAt(0).toUpperCase() +
                       category.name.slice(1)}
                   </Link>
@@ -51,8 +55,16 @@ export default function MiddelMenuLittle({
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-        {user && <Link href={"/profile"}>Profile</Link>}
-        {user?.role === "ADMIN" && <Link href={"/admin"}>Admin</Link>}
+        {user && (
+          <Link onClick={() => setOpen(false)} href={"/profile"}>
+            Profile
+          </Link>
+        )}
+        {user?.role === "ADMIN" && (
+          <Link onClick={() => setOpen(false)} href={"/admin"}>
+            Admin
+          </Link>
+        )}
       </SheetContent>
     </Sheet>
   );

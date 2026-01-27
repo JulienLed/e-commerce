@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
-        <header className="sticky top-0 z-88">
+        <header className="sticky top-0 z-30">
           <Header />
         </header>
 
@@ -26,7 +26,7 @@ export default function RootLayout({
           <Toaster position="top-center" duration={3000} />
         </main>
 
-        <footer className="relative z-88">
+        <footer className="relative z-30">
           <Footer />
         </footer>
       </body>
