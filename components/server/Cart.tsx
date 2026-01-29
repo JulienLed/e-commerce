@@ -31,60 +31,83 @@ export async function Cart() {
   };
 
   return (
-    <Card>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead colSpan={2}></TableHead>
-              <TableHead>Produit</TableHead>
-              <TableHead>Quantité</TableHead>
-              <TableHead>Prix unitaire</TableHead>
-              <TableHead>Prix total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {cart?.CartItem.map((item) => {
-              return (
-                <TableRow key={item.id} className="h-20!">
-                  <TableCell>
-                    <DeleteButton
-                      cartId={cart.id}
-                      productId={item.Product.id}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Image
-                      alt={item.Product.name}
-                      src={item.Product.image || ""}
-                      width={50}
-                      height={50}
-                      className="object-cover rounded-sm"
-                    />
-                  </TableCell>
-                  <TableCell>{item.Product.name}</TableCell>
-                  <TableCell>
-                    <ModifyQuantityInput
-                      productId={item.productId}
-                      quantity={item.quantity}
-                    />
-                  </TableCell>
-                  <TableCell>{`${item.Product.price / 100} €`}</TableCell>
-                  <TableCell>{`${
-                    (item.Product.price * item.quantity) / 100
-                  } €`}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={5}>Total</TableCell>
-              <TableCell>{`${handleTotalPrice()} €`}</TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </CardContent>
-    </Card>
+    <>
+      <Card className="hidden md:flex">
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead colSpan={2}></TableHead>
+                <TableHead>Produit</TableHead>
+                <TableHead>Quantité</TableHead>
+                <TableHead>Prix unitaire</TableHead>
+                <TableHead>Prix total</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {cart?.CartItem.map((item) => {
+                return (
+                  <TableRow key={item.id} className="h-20!">
+                    <TableCell>
+                      <DeleteButton
+                        cartId={cart.id}
+                        productId={item.Product.id}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Image
+                        alt={item.Product.name}
+                        src={item.Product.image || ""}
+                        width={50}
+                        height={50}
+                        className="object-cover rounded-sm"
+                      />
+                    </TableCell>
+                    <TableCell>{item.Product.name}</TableCell>
+                    <TableCell>
+                      <ModifyQuantityInput
+                        productId={item.productId}
+                        quantity={item.quantity}
+                      />
+                    </TableCell>
+                    <TableCell>{`${item.Product.price / 100} €`}</TableCell>
+                    <TableCell>{`${
+                      (item.Product.price * item.quantity) / 100
+                    } €`}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={5}>Total</TableCell>
+                <TableCell>{`${handleTotalPrice()} €`}</TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </CardContent>
+      </Card>
+      {cart.CartItem.map((item) => {
+        return (
+          <Card key={item.id} className="flex md:hidden">
+            <CardContent className="flex gap-2">
+              <DeleteButton cartId={cart.id} productId={item.Product.id} />
+              <Image
+                alt={item.Product.name}
+                src={item.Product.image || "/no-image.jpg"}
+                width={35}
+                height={35}
+                className="object-cover rounded-sm"
+              />
+              <ModifyQuantityInput
+                productId={item.productId}
+                quantity={item.quantity}
+              />
+              <p>{`${(item.Product.price * item.quantity) / 100} €`}</p>
+            </CardContent>
+          </Card>
+        );
+      })}
+    </>
   );
 }

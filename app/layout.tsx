@@ -16,12 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body>
+      <body className="flex flex-col min-h-screen">
         <header className="sticky top-0 z-30">
           <Header />
         </header>
 
-        <main className="w-[90vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col items-center gap-5">
+        <main className="w-[90vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col flex-1 items-center gap-5">
           {children}
           <Toaster position="top-center" duration={3000} />
         </main>

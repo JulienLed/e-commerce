@@ -27,7 +27,7 @@ export default function NavBarAdmin() {
   ];
 
   return (
-    <Sidebar>
+    <Sidebar className="fixed! top-40">
       <SidebarHeader>
         <h1>Panneau d'Administration</h1>
       </SidebarHeader>

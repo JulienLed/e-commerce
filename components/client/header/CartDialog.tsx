@@ -3,7 +3,7 @@
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Dialog, DialogContent, DialogTrigger } from "../../ui/dialog";
 import { ShoppingCart } from "lucide-react";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -12,9 +12,11 @@ import { cn } from "@/lib/utils";
 export const CartDialog = ({
   cart,
   products,
+  handleOnClick,
 }: {
   cart: React.ReactNode;
   products: number;
+  handleOnClick?: React.Dispatch<SetStateAction<boolean>>;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -35,7 +37,12 @@ export const CartDialog = ({
       <DialogContent className="max-w-5xl! max-h-xl!">
         <DialogTitle>Panier</DialogTitle>
         <div className="overflow-y-auto max-h-[90%]">{cart}</div>
-        <Button onClick={() => setIsOpen(false)}>
+        <Button
+          onClick={() => {
+            handleOnClick?.(false);
+            setIsOpen(false);
+          }}
+        >
           <Link href={"/cart"}>Voir le panier complet</Link>
         </Button>
       </DialogContent>

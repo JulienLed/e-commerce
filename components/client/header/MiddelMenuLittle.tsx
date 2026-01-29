@@ -17,13 +17,19 @@ import { User, Category } from "@prisma/client";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import RightMenu from "./RightMenu";
+import { Cart } from "@/components/server/Cart";
 
 export default function MiddelMenuLittle({
   user,
   categories,
+  products,
+  cart,
 }: {
   user: User | null;
   categories: Category[];
+  products: number;
+  cart: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -31,11 +37,13 @@ export default function MiddelMenuLittle({
       <SheetTrigger>
         <Menu />
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="pl-2">
         <SheetHeader>
           <SheetTitle>Menu</SheetTitle>
         </SheetHeader>
-        <Link href={"/"}>Accueil</Link>
+        <Link onClick={() => setOpen(false)} href={"/"}>
+          Accueil
+        </Link>
         <Accordion type="single" collapsible>
           <AccordionItem value="Produits">
             <AccordionTrigger>Produits</AccordionTrigger>
@@ -65,6 +73,12 @@ export default function MiddelMenuLittle({
             Admin
           </Link>
         )}
+        <RightMenu
+          cart={cart}
+          products={products}
+          user={user}
+          handleOnClick={setOpen}
+        />
       </SheetContent>
     </Sheet>
   );
