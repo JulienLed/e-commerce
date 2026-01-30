@@ -29,6 +29,13 @@ export default async function Page({
       key === "status"
     );
   });
+  const getDate = (date: Date) => {
+    const day = new Date(date).getDate();
+    const data = new Date(date).getMonth() + 1;
+    const month = data < 10 ? "0" + data : data;
+    const year = new Date(date).getFullYear();
+    return `${day}/${month}/${year}`;
+  };
   return (
     <Card>
       <CardHeader>
@@ -55,6 +62,7 @@ export default async function Page({
                       id="body"
                       className="flex justify-between md:grid md:grid-cols-[20%_17%_17%_17%_30%] w-full text-center"
                     >
+                      <div>{getDate(order.createdAt)}</div>
                       <div className="overflow-scroll">{order.userId}</div>
                       <div>{order.shippingName}</div>
                       <div>{order.shippingSurname}</div>
