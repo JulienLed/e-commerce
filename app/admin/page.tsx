@@ -18,24 +18,36 @@ export default async function Page() {
             <div className="flex flex-col gap-5">
               <section id="orders">
                 <h2 className="text-xl font-semibold">Les commandes</h2>
-                <p>{`Nombre de commandes en attente de paiement : ${ordersCountByStatus.PENDING}`}</p>
-                <p>{`Nombre de commandes en attente d'envoi : ${ordersCountByStatus.PAID}`}</p>
-                <p>{`Nombre de commandes en attente de réception par le client : ${ordersCountByStatus.SHIPPED}`}</p>
-                <p>{`Nombre de commandes délivrées : ${ordersCountByStatus.DELIVERED}`}</p>
-                <p>{`Nombre de commandes annulées : ${ordersCountByStatus.CANCELLED}`}</p>
+                <div className="grid grid-cols-[90%_10%] items-center">
+                  <p>{`Nombre de commandes en attente de paiement : `}</p>
+                  <span>{ordersCountByStatus.PENDING}</span>
+                  <p>{`Nombre de commandes en attente d'envoi : `}</p>
+                  <span>{ordersCountByStatus.PAID}</span>
+                  <p>{`Nombre de commandes en attente de réception par le client : `}</p>
+                  <span>{ordersCountByStatus.SHIPPED}</span>
+                  <p>{`Nombre de commandes délivrées : `}</p>
+                  <span>{ordersCountByStatus.DELIVERED}</span>
+                  <p>{`Nombre de commandes annulées : `}</p>
+                  <span>{ordersCountByStatus.CANCELLED}</span>
+                </div>
               </section>
               <section id="sales">
                 <h2 className="text-xl font-semibold">Les ventes</h2>
-                <p>{`Depuis l'ouverture, votre chiffre d'affaire est de : ${(
-                  sales / 100
-                ).toFixed(2)} €`}</p>
+                <div className="grid grid-cols-[auto_auto] items-center">
+                  <p>{`Depuis l'ouverture, votre chiffre d'affaire est de : `}</p>
+                  <span>{(sales / 100).toFixed(2)} €</span>
+                </div>
               </section>
               <section id="usersCount">
                 <h2 className="text-xl font-semibold">
                   Les utilisateurs du site
                 </h2>
-                <p>{`Nombre d'utilisateurs inscrit sur site : ${usersCount.userCount}`}</p>
-                <p>{`Nombre d'utilisateurs non-inscrit sur site : ${usersCount.guestCount}`}</p>
+                <div className="grid grid-cols-[90%_10%] items-center">
+                  <p>{`Nombre d'utilisateurs inscrit sur site : `}</p>
+                  <span>{usersCount.userCount}</span>
+                  <p>{`Nombre d'utilisateurs non-inscrit sur site : `}</p>
+                  <span>{usersCount.guestCount}</span>
+                </div>
               </section>
             </div>
           </CardContent>

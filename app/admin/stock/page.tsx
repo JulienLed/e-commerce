@@ -36,14 +36,14 @@ export default async function Page() {
             return (
               <Card key={category}>
                 <CardHeader>
-                  <div className="flex justify-between">
+                  <div className="grid grid-cols-[50%_50%] md:flex md:justify-between">
                     <CardTitle>{category}</CardTitle>
                     <DeleteCategory categoryId={products.categoryId} />
                   </div>
                 </CardHeader>
                 <CardContent>
                   <Suspense fallback={<Loading />}>
-                    <Table>
+                    <Table className="hidden md:flex">
                       <TableHeader>
                         <TableRow>
                           <TableHead>Image</TableHead>
@@ -82,6 +82,33 @@ export default async function Page() {
                         </TableRow>
                       </TableBody>
                     </Table>
+                    <div className="flex flex-col gap-2 md:hidden">
+                      {products.products.length >= 1 &&
+                        products.products.map((product) => {
+                          return (
+                            <Card
+                              key={product.id}
+                              className="grid grid-cols-3 px-5"
+                            >
+                              <div className="col-span-1">
+                                <DeleteProduct product={product} />
+                              </div>
+                              <div className="col-span-2">
+                                <ModifyImageProduct product={product} />
+                              </div>
+                              <div className="col-span-3">
+                                <ModifyNameInput product={product} />
+                              </div>
+                              <div className="col-span-3">
+                                <ModifyPriceInput product={product} />
+                              </div>
+                              <div className="col-span-3">
+                                <ModifyStockInput product={product} />
+                              </div>
+                            </Card>
+                          );
+                        })}
+                    </div>
                   </Suspense>
                 </CardContent>
               </Card>

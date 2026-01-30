@@ -44,6 +44,9 @@ export default function ModifyStatusInput({ order }: { order: Order }) {
           setStatusInput(e.target.value as OrderStatus);
         }}
         disabled={isPending}
+        size="sm"
+        className="w-fit!"
+        style={{ fontSize: "10px" }}
       >
         {status.map((item) => {
           return (
@@ -56,9 +59,11 @@ export default function ModifyStatusInput({ order }: { order: Order }) {
       {statusInput != order.status && (
         <Tooltip>
           <TooltipTrigger asChild>
-            <CircleAlert size={20} color="orange" />
+            <CircleAlert size={10} color="orange" />
           </TooltipTrigger>
-          <TooltipContent>Le status a été modifié</TooltipContent>
+          <TooltipContent className="text-sm">
+            Le status a été modifié
+          </TooltipContent>
         </Tooltip>
       )}
       <div
