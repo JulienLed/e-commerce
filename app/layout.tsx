@@ -21,7 +21,7 @@ export default function RootLayout({
           <Header />
         </header>
 
-        <main className="w-[90vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col flex-1 items-center gap-5">
+        <main className="w-[95vw] md:w-[80vw] mx-auto my-[5vh] flex flex-col flex-1 items-center gap-5">
           {children}
           <Toaster position="top-center" duration={3000} />
         </main>

@@ -19,7 +19,7 @@ export default async function DashboardLayout({
         <SidebarInset>
           <main>{children}</main>
         </SidebarInset>
-        <footer className="fixed bottom-0 -ml-5 mr-5 flex md:hidden">
+        <footer className="fixed bottom-0 -ml-5 mr-5 flex md:hidden z-40">
           <NavBarAdminMini />
         </footer>
       </SidebarProvider>

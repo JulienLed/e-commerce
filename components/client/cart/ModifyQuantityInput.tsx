@@ -25,11 +25,11 @@ export default function ModifyQuantityInput({
     });
   };
   return (
-    <div className="flex gap-2">
+    <div className="flex justify-between md:justify-evenly items-center gap-2">
       <Input
         value={count}
         onChange={(e) => setCount(Number(e.target.value))}
-        className="w-20! text-center"
+        className="w-10! md:w-20! text-center"
       />
       <Button onClick={() => handleOnClick()} disabled={isPending}>
         Ok

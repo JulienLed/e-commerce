@@ -46,7 +46,7 @@ export default async function Page() {
                     <AccordionContent>
                       <Order order={order} />
                       {order.status === "PENDING" ? (
-                        <div className="flex justify-evenly gap-2 m-2">
+                        <div className="flex flex-col md:flex-row md:justify-evenly gap-2 m-2">
                           <Button>
                             <Link href={"/checkout"}>Procéder au paiement</Link>
                           </Button>

@@ -28,6 +28,7 @@ export default async function Categories() {
               alt="category-image"
               src={getCategoryImage(category.id)}
               fill
+              priority
               className="rounded-lg"
             />
             <div className="absolute w-full h-full bg-fuchsia-200/20"></div>

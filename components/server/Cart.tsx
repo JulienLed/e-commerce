@@ -87,10 +87,13 @@ export async function Cart() {
           </Table>
         </CardContent>
       </Card>
-      {cart.CartItem.map((item) => {
-        return (
-          <Card key={item.id} className="flex md:hidden">
-            <CardContent className="flex gap-2">
+      <Card className="flex md:hidden ">
+        {cart.CartItem.map((item) => {
+          return (
+            <CardContent
+              key={item.id}
+              className="flex justify-between items-center gap-2"
+            >
               <DeleteButton cartId={cart.id} productId={item.Product.id} />
               <Image
                 alt={item.Product.name}
@@ -105,9 +108,9 @@ export async function Cart() {
               />
               <p>{`${(item.Product.price * item.quantity) / 100} €`}</p>
             </CardContent>
-          </Card>
-        );
-      })}
+          );
+        })}
+      </Card>
     </>
   );
 }

@@ -25,11 +25,11 @@ export default function ModifyStatusInput({ order }: { order: Order }) {
       const response = await updateStatus(order.id, statusInput);
       if (response.status === statusInput) {
         toast.message(
-          `Status ${response.status} bien appliqué à la commande ${order.id}`
+          `Status ${response.status} bien appliqué à la commande ${order.id}`,
         );
       } else {
         toast.error(
-          `Status ${response.status} pas appliqué à la commande ${order.id}`
+          `Status ${response.status} pas appliqué à la commande ${order.id}`,
         );
       }
     });

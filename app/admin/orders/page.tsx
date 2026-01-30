@@ -37,7 +37,7 @@ export default async function Page({
       <CardContent>
         <section
           id="header"
-          className="grid grid-cols-[20%_17%_17%_17%_30%] w-full text-center"
+          className="hidden md:grid md:grid-cols-[20%_17%_17%_17%_30%] w-full text-center"
         >
           {headKeys.map((key, index) => (
             <div key={index}>
@@ -53,11 +53,15 @@ export default async function Page({
                   <AccordionTrigger>
                     <section
                       id="body"
-                      className="grid grid-cols-[20%_17%_17%_17%_30%] w-full text-center"
+                      className="flex justify-between md:grid md:grid-cols-[20%_17%_17%_17%_30%] w-full text-center"
                     >
-                      <div className="overflow-scroll">{order.userId}</div>
-                      <div>{order.shippingName}</div>
-                      <div>{order.shippingSurname}</div>
+                      <div className="hidden md:flex overflow-scroll">
+                        {order.userId}
+                      </div>
+                      <div className="hidden md:flex">{order.shippingName}</div>
+                      <div className="hidden md:flex">
+                        {order.shippingSurname}
+                      </div>
                       <div>{order.shippingEmail}</div>
                       <div>
                         <ModifyStatusInput order={order} />
