@@ -36,6 +36,7 @@ export default async function Page({
     const year = new Date(date).getFullYear();
     return `${day}/${month}/${year}`;
   };
+  //NEED TO PUT AN ADDITIONAL COL + DO THE RESPONSIVE
   return (
     <Card>
       <CardHeader>

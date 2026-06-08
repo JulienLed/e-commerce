@@ -9,7 +9,11 @@ export async function middleware(req: NextRequest) {
 
   //Vérifier Role
   if (pathname.startsWith("/admin")) {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    const token = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET,
+      secureCookie: req.nextUrl.protocol === "https:",
+    });
     if (!token) return NextResponse.redirect(new URL("/signIn", req.url));
     if (token.role !== "ADMIN")
       return NextResponse.redirect(new URL("/", req.url));
